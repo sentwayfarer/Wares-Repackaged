@@ -35,15 +35,14 @@ import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.extensions.IForgeMenuType;
-import net.minecraftforge.common.util.ForgeSoundType;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.ModContainer;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.common.extensions.IMenuTypeExtension;
+import net.neoforged.neoforge.common.util.DeferredSoundType;
+import net.neoforged.neoforge.registries.DeferredHolder;
+import net.neoforged.neoforge.registries.DeferredRegister;
 import org.slf4j.Logger;
 
 import java.util.HashMap;
@@ -56,49 +55,47 @@ public class Wares
     public static final String ID = "wares";
     public static final Logger LOGGER = LogUtils.getLogger();
 
-    public Wares()
+    public Wares(ModContainer mod, IEventBus bus)
     {
-        IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
-
         Config.init();
-        modEventBus.addListener(Config::onConfigLoad);
-        modEventBus.addListener(Config::onConfigReload);
+        bus.addListener(Config::onConfigLoad);
+        bus.addListener(Config::onConfigReload);
 
-        Blocks.BLOCKS.register(modEventBus);
-        BlockEntities.BLOCK_ENTITIES.register(modEventBus);
-        MenuTypes.MENU_TYPES.register(modEventBus);
-        Items.ITEMS.register(modEventBus);
-        Villagers.POI_TYPES.register(modEventBus);
-        Villagers.PROFESSIONS.register(modEventBus);
-        SoundEvents.SOUNDS.register(modEventBus);
+        Blocks.BLOCKS.register(bus);
+        BlockEntities.BLOCK_ENTITIES.register(bus);
+        MenuTypes.MENU_TYPES.register(bus);
+        Items.ITEMS.register(bus);
+        Villagers.POI_TYPES.register(bus);
+        Villagers.PROFESSIONS.register(bus);
+        SoundEvents.SOUNDS.register(bus);
 
-        MinecraftForge.EVENT_BUS.addListener(VillageStructures::addVillageStructures);
+        NeoForge.EVENT_BUS.addListener(VillageStructures::addVillageStructures);
     }
 
     /**
      * Creates resource location in the mod namespace with the given path.
      */
     public static ResourceLocation resource(String path) {
-        return new ResourceLocation(ID, path);
+        return ResourceLocation.fromNamespaceAndPath(ID, path);
     }
 
 
     public static class Blocks {
-        private static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, ID);
+        private static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(BuiltInRegistries.BLOCK, ID);
 
-        public static final RegistryObject<DeliveryTableBlock> DELIVERY_TABLE = BLOCKS.register("delivery_table",
+        public static final DeferredHolder<Block, DeliveryTableBlock> DELIVERY_TABLE = BLOCKS.register("delivery_table",
                 () -> new DeliveryTableBlock(BlockBehaviour.Properties.of()
                         .sound(SoundType.WOOD)
                         .mapColor(MapColor.COLOR_BROWN)
                         .strength(2f)));
 
-        public static final RegistryObject<CardboardBoxBlock> CARDBOARD_BOX = BLOCKS.register("cardboard_box",
+        public static final DeferredHolder<Block, CardboardBoxBlock> CARDBOARD_BOX = BLOCKS.register("cardboard_box",
                 () -> new CardboardBoxBlock(BlockBehaviour.Properties.of()
                         .sound(SoundTypes.CARDBOARD)
                         .mapColor(MapColor.COLOR_BROWN)
                         .strength(0.4f)));
 
-        public static final RegistryObject<PackageBlock> PACKAGE = BLOCKS.register("package",
+        public static final DeferredHolder<Block, PackageBlock> PACKAGE = BLOCKS.register("package",
                 () -> new PackageBlock(BlockBehaviour.Properties.of()
                         .sound(SoundTypes.CARDBOARD)
                         .mapColor(MapColor.COLOR_BROWN)
@@ -107,88 +104,87 @@ public class Wares
 
     @SuppressWarnings("DataFlowIssue")
     public static class BlockEntities {
-        private static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, ID);
+        private static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(BuiltInRegistries.BLOCK_ENTITY_TYPE, ID);
 
         @SuppressWarnings("DataFlowIssue")
-        public static final RegistryObject<BlockEntityType<DeliveryTableBlockEntity>> DELIVERY_TABLE =
+        public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<DeliveryTableBlockEntity>> DELIVERY_TABLE =
                 BLOCK_ENTITIES.register("delivery_table",
                         () -> BlockEntityType.Builder.of(DeliveryTableBlockEntity::new, Blocks.DELIVERY_TABLE.get()).build(null));
 
-        public static final RegistryObject<BlockEntityType<PackageBlockEntity>> PACKAGE =
+        public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<PackageBlockEntity>> PACKAGE =
                 BLOCK_ENTITIES.register("package",
                         () -> BlockEntityType.Builder.of(PackageBlockEntity::new, Blocks.PACKAGE.get()).build(null));
     }
 
     public static class MenuTypes {
-        private static final DeferredRegister<MenuType<?>> MENU_TYPES = DeferredRegister.create(ForgeRegistries.MENU_TYPES, Wares.ID);
+        private static final DeferredRegister<MenuType<?>> MENU_TYPES = DeferredRegister.create(BuiltInRegistries.MENU, Wares.ID);
 
-        public static final RegistryObject<MenuType<DeliveryTableMenu>> DELIVERY_TABLE = MENU_TYPES
-                .register("delivery_table", () -> IForgeMenuType.create(DeliveryTableMenu::fromBuffer));
+        public static final DeferredHolder<MenuType<?>, MenuType<DeliveryTableMenu>> DELIVERY_TABLE = MENU_TYPES
+                .register("delivery_table", () -> IMenuTypeExtension.create(DeliveryTableMenu::fromBuffer));
 
-        public static final RegistryObject<MenuType<CardboardBoxMenu>> CARDBOARD_BOX = MENU_TYPES
-                .register("cardboard_box", () -> IForgeMenuType.create(CardboardBoxMenu::fromBuffer));
+        public static final DeferredHolder<MenuType<?>, MenuType<CardboardBoxMenu>> CARDBOARD_BOX = MENU_TYPES
+                .register("cardboard_box", () -> IMenuTypeExtension.create(CardboardBoxMenu::fromBuffer));
     }
 
     public static class Items {
-        private static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, ID);
+        private static final DeferredRegister<Item> ITEMS = DeferredRegister.create(BuiltInRegistries.ITEM, ID);
 
-        public static final RegistryObject<SealedDeliveryAgreementItem> SEALED_DELIVERY_AGREEMENT = ITEMS.register("sealed_delivery_agreement", () ->
+        public static final DeferredHolder<Item, SealedDeliveryAgreementItem> SEALED_DELIVERY_AGREEMENT = ITEMS.register("sealed_delivery_agreement", () ->
                 new SealedDeliveryAgreementItem(new Item.Properties()
                         .stacksTo(1)));
-        public static final RegistryObject<DeliveryAgreementItem> DELIVERY_AGREEMENT = ITEMS.register("delivery_agreement", () ->
+        public static final DeferredHolder<Item, DeliveryAgreementItem> DELIVERY_AGREEMENT = ITEMS.register("delivery_agreement", () ->
                 new DeliveryAgreementItem(new Item.Properties()
                         .stacksTo(1)));
-        public static final RegistryObject<DeliveryAgreementItem> COMPLETED_DELIVERY_AGREEMENT = ITEMS.register("completed_delivery_agreement", () ->
+        public static final DeferredHolder<Item, DeliveryAgreementItem> COMPLETED_DELIVERY_AGREEMENT = ITEMS.register("completed_delivery_agreement", () ->
                 new DeliveryAgreementItem(new Item.Properties()
                         .stacksTo(1)));
-        public static final RegistryObject<DeliveryAgreementItem> EXPIRED_DELIVERY_AGREEMENT = ITEMS.register("expired_delivery_agreement", () ->
+        public static final DeferredHolder<Item, DeliveryAgreementItem> EXPIRED_DELIVERY_AGREEMENT = ITEMS.register("expired_delivery_agreement", () ->
                 new DeliveryAgreementItem(new Item.Properties()
                         .stacksTo(1)));
 
-        public static final RegistryObject<BlockItem> DELIVERY_TABLE = ITEMS.register("delivery_table", () ->
+        public static final DeferredHolder<Item, BlockItem> DELIVERY_TABLE = ITEMS.register("delivery_table", () ->
                 new BlockItem(Blocks.DELIVERY_TABLE.get(), new Item.Properties()));
 
-        public static final RegistryObject<CardboardBoxItem> CARDBOARD_BOX = ITEMS.register("cardboard_box", () ->
+        public static final DeferredHolder<Item, CardboardBoxItem> CARDBOARD_BOX = ITEMS.register("cardboard_box", () ->
                 new CardboardBoxItem(Blocks.CARDBOARD_BOX.get(), new Item.Properties()));
-        public static final RegistryObject<PackageItem> PACKAGE = ITEMS.register("package", () ->
+        public static final DeferredHolder<Item, PackageItem> PACKAGE = ITEMS.register("package", () ->
                 new PackageItem(Blocks.PACKAGE.get(), new Item.Properties()
                         .stacksTo(1)));
     }
 
     public static class Villagers {
-        public static final DeferredRegister<PoiType> POI_TYPES = DeferredRegister.create(ForgeRegistries.POI_TYPES, Wares.ID);
-        public static final DeferredRegister<VillagerProfession> PROFESSIONS = DeferredRegister.create(ForgeRegistries.VILLAGER_PROFESSIONS, Wares.ID);
+        public static final DeferredRegister<PoiType> POI_TYPES = DeferredRegister.create(BuiltInRegistries.POINT_OF_INTEREST_TYPE, Wares.ID);
+        public static final DeferredRegister<VillagerProfession> PROFESSIONS = DeferredRegister.create(BuiltInRegistries.VILLAGER_PROFESSION, Wares.ID);
 
 
-        public static final RegistryObject<PoiType> DELIVERY_TABLE_POI = POI_TYPES.register(Blocks.DELIVERY_TABLE.getId().getPath(),
+        public static final DeferredHolder<PoiType, PoiType> DELIVERY_TABLE_POI = POI_TYPES.register(Blocks.DELIVERY_TABLE.getId().getPath(),
                 () -> new PoiType(ImmutableSet.copyOf(Blocks.DELIVERY_TABLE.get().getStateDefinition().getPossibleStates()), 1, 1));
 
-        public static final RegistryObject<VillagerProfession> PACKAGER = PROFESSIONS.register("packager",
+        public static final DeferredHolder<VillagerProfession, VillagerProfession> PACKAGER = PROFESSIONS.register("packager",
                 () -> new VillagerProfession("packager", poi -> poi.is(Objects.requireNonNull(DELIVERY_TABLE_POI.getKey())), poi -> poi.is(Objects.requireNonNull(DELIVERY_TABLE_POI.getKey())),
                         ImmutableSet.of(), ImmutableSet.of(), null));
     }
 
     public static class SoundEvents {
-        private static final DeferredRegister<SoundEvent> SOUNDS = DeferredRegister.create(ForgeRegistries.SOUND_EVENTS, Wares.ID);
+        private static final DeferredRegister<SoundEvent> SOUNDS = DeferredRegister.create(BuiltInRegistries.SOUND_EVENT, Wares.ID);
 
-        public static final RegistryObject<SoundEvent> PAPER_TEAR = registerSound("item", "paper.tear");
-        public static final RegistryObject<SoundEvent> PAPER_CRACKLE = registerSound("item", "paper.crackle");
+        public static final DeferredHolder<SoundEvent, SoundEvent> PAPER_TEAR = registerSound("item", "paper.tear");
+        public static final DeferredHolder<SoundEvent, SoundEvent> PAPER_CRACKLE = registerSound("item", "paper.crackle");
 
+        public static final DeferredHolder<SoundEvent, SoundEvent> CARDBOARD_PLACE = registerSound("block", "cardboard.place");
+        public static final DeferredHolder<SoundEvent, SoundEvent> CARDBOARD_BREAK = registerSound("block", "cardboard.break");
+        public static final DeferredHolder<SoundEvent, SoundEvent> CARDBOARD_HIT = registerSound("block", "cardboard.hit");
+        public static final DeferredHolder<SoundEvent, SoundEvent> CARDBOARD_FALL = registerSound("block", "cardboard.fall");
+        public static final DeferredHolder<SoundEvent, SoundEvent> CARDBOARD_STEP = registerSound("block", "cardboard.step");
 
-        public static final RegistryObject<SoundEvent> CARDBOARD_PLACE = registerSound("block", "cardboard.place");
-        public static final RegistryObject<SoundEvent> CARDBOARD_BREAK = registerSound("block", "cardboard.break");
-        public static final RegistryObject<SoundEvent> CARDBOARD_HIT = registerSound("block", "cardboard.hit");
-        public static final RegistryObject<SoundEvent> CARDBOARD_FALL = registerSound("block", "cardboard.fall");
-        public static final RegistryObject<SoundEvent> CARDBOARD_STEP = registerSound("block", "cardboard.step");
+        public static final DeferredHolder<SoundEvent, SoundEvent> WRITING = registerSound("block", "delivery_table.writing");
+        public static final DeferredHolder<SoundEvent, SoundEvent> DELIVERY_TABLE_OPEN = registerSound("block", "delivery_table.open");
+        public static final DeferredHolder<SoundEvent, SoundEvent> DELIVERY_TABLE_CLOSE = registerSound("block", "delivery_table.close");
+        public static final DeferredHolder<SoundEvent, SoundEvent> CARDBOARD_BOX_USE = registerSound("block", "cardboard_box.use");
 
-        public static final RegistryObject<SoundEvent> WRITING = registerSound("block", "delivery_table.writing");
-        public static final RegistryObject<SoundEvent> DELIVERY_TABLE_OPEN = registerSound("block", "delivery_table.open");
-        public static final RegistryObject<SoundEvent> DELIVERY_TABLE_CLOSE = registerSound("block", "delivery_table.close");
-        public static final RegistryObject<SoundEvent> CARDBOARD_BOX_USE = registerSound("block", "cardboard_box.use");
+        public static final DeferredHolder<SoundEvent, SoundEvent> VILLAGER_WORK_PACKAGER = registerSound("entity", "villager.work_packager");
 
-        public static final RegistryObject<SoundEvent> VILLAGER_WORK_PACKAGER = registerSound("entity", "villager.work_packager");
-
-        private static RegistryObject<SoundEvent> registerSound(String category, String key) {
+        private static DeferredHolder<SoundEvent, SoundEvent> registerSound(String category, String key) {
             Preconditions.checkState(category != null && category.length() > 0, "'category' should not be empty.");
             Preconditions.checkState(key != null && key.length() > 0, "'key' should not be empty.");
             String path = category + "." + key;
@@ -197,7 +193,7 @@ public class Wares
     }
 
     public static class SoundTypes {
-        public static final SoundType CARDBOARD = new ForgeSoundType(1f, 1f, SoundEvents.CARDBOARD_BREAK, SoundEvents.CARDBOARD_STEP, SoundEvents.CARDBOARD_PLACE, SoundEvents.CARDBOARD_HIT, SoundEvents.CARDBOARD_FALL);
+        public static final SoundType CARDBOARD = new DeferredSoundType(1f, 1f, SoundEvents.CARDBOARD_BREAK, SoundEvents.CARDBOARD_STEP, SoundEvents.CARDBOARD_PLACE, SoundEvents.CARDBOARD_HIT, SoundEvents.CARDBOARD_FALL);
     }
 
     public static class Stats {
@@ -230,9 +226,9 @@ public class Wares
         public static DeliveryTableTrigger AGREEMENT_EXPIRED = new DeliveryTableTrigger(Wares.resource("agreement_expired"));
 
         public static void register() {
-            CriteriaTriggers.register(BATCH_DELIVERED);
-            CriteriaTriggers.register(AGREEMENT_COMPLETED);
-            CriteriaTriggers.register(AGREEMENT_EXPIRED);
+            CriteriaTriggers.register("batch_delivered", BATCH_DELIVERED);
+            CriteriaTriggers.register("agreement_completed", AGREEMENT_COMPLETED);
+            CriteriaTriggers.register("agreement_expired", AGREEMENT_EXPIRED);
         }
     }
 
