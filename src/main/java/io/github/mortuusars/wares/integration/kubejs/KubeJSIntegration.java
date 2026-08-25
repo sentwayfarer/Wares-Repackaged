@@ -3,12 +3,12 @@ package io.github.mortuusars.wares.integration.kubejs;
 import com.google.common.base.Supplier;
 import com.google.common.base.Suppliers;
 import io.github.mortuusars.wares.block.entity.DeliveryTableBlockEntity;
-import io.github.mortuusars.wares.integration.kubejs.event.DeliveryEventJS;
+import io.github.mortuusars.wares.integration.kubejs.event.DeliveryKubeEvent;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraftforge.fml.ModList;
+import net.neoforged.fml.ModList;
 import org.jetbrains.annotations.Nullable;
 
-public class KubeJS {
+public class KubeJSIntegration {
     private static final Supplier<Boolean> isLoaded = Suppliers.memoize(() -> ModList.get().isLoaded("kubejs"));
 
     public static boolean isLoaded() {
@@ -38,15 +38,15 @@ public class KubeJS {
      */
     private static class Events {
         public static void batchDelivered(DeliveryTableBlockEntity blockEntity, @Nullable ServerPlayer player) {
-            WaresJSEvents.BATCH_DELIVERED.post(new DeliveryEventJS(blockEntity, player));
+            WaresKubeEvents.BATCH_DELIVERED.post(new DeliveryKubeEvent(blockEntity, player));
         }
 
         public static void agreementCompleted(DeliveryTableBlockEntity blockEntity, @Nullable ServerPlayer player) {
-            WaresJSEvents.AGREEMENT_COMPLETED.post(new DeliveryEventJS(blockEntity, player));
+            WaresKubeEvents.AGREEMENT_COMPLETED.post(new DeliveryKubeEvent(blockEntity, player));
         }
 
         public static void agreementExpired(DeliveryTableBlockEntity blockEntity, @Nullable ServerPlayer player) {
-            WaresJSEvents.AGREEMENT_EXPIRED.post(new DeliveryEventJS(blockEntity, player));
+            WaresKubeEvents.AGREEMENT_EXPIRED.post(new DeliveryKubeEvent(blockEntity, player));
         }
     }
 }

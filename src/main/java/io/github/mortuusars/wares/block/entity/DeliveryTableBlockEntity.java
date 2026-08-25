@@ -7,7 +7,7 @@ import io.github.mortuusars.wares.config.Config;
 import io.github.mortuusars.wares.data.agreement.DeliveryAgreement;
 import io.github.mortuusars.wares.data.agreement.AgreementType;
 import io.github.mortuusars.wares.data.agreement.component.RequestedItem;
-import io.github.mortuusars.wares.integration.kubejs.KubeJS;
+import io.github.mortuusars.wares.integration.kubejs.KubeJSIntegration;
 import io.github.mortuusars.wares.item.DeliveryAgreementItem;
 import io.github.mortuusars.wares.menu.DeliveryTableMenu;
 import net.minecraft.MethodsReturnNonnullByDefault;
@@ -207,7 +207,7 @@ public class DeliveryTableBlockEntity extends BaseContainerBlockEntity implement
         @Nullable ServerPlayer player = getAwardedPlayer();
 
         triggerAdvancement(Wares.AdvancementTriggers.BATCH_DELIVERED, player);
-        KubeJS.batchDelivered(this, player);
+        KubeJSIntegration.batchDelivered(this, player);
     }
 
     protected boolean isPackagerWorkingAtTable() {
@@ -628,13 +628,13 @@ public class DeliveryTableBlockEntity extends BaseContainerBlockEntity implement
             setAgreementItem(DeliveryAgreementItem.convertToCompleted(getAgreementItem()));
             @Nullable ServerPlayer player = getAwardedPlayer();
             triggerAdvancement(Wares.AdvancementTriggers.AGREEMENT_COMPLETED, player);
-            KubeJS.agreementCompleted(this, player);
+            KubeJSIntegration.agreementCompleted(this, player);
         }
         else if (getAgreement().isExpired(level.getGameTime())) {
             setAgreementItem(DeliveryAgreementItem.convertToExpired(getAgreementItem()));
             @Nullable ServerPlayer player = getAwardedPlayer();
             triggerAdvancement(Wares.AdvancementTriggers.AGREEMENT_EXPIRED, player);
-            KubeJS.agreementExpired(this, player);
+            KubeJSIntegration.agreementExpired(this, player);
         }
     }
 

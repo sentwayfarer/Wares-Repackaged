@@ -1,10 +1,12 @@
 package io.github.mortuusars.wares.integration.kubejs;
 
-import dev.latvian.mods.kubejs.KubeJSPlugin;
+import dev.latvian.mods.kubejs.event.EventGroupRegistry;
+import dev.latvian.mods.kubejs.plugin.KubeJSPlugin;
 
-public class WaresKubeJSPlugin extends KubeJSPlugin {
+public class WaresKubeJSPlugin implements KubeJSPlugin {
     @Override
-    public void registerEvents() {
-        WaresJSEvents.register();
+    public void registerEvents(EventGroupRegistry registry) {
+        WaresKubeEvents.init();
+        registry.register(WaresKubeEvents.GROUP);
     }
 }
