@@ -55,9 +55,12 @@ public abstract class MPFRenderable<T extends MPFRenderable<T>> extends Abstract
         return this.visible && visibilityPredicate.isVisible(getThis(), mouseX, mouseY);
     }
 
+    public abstract void submit(GuiGraphics graphics, int mouseX, int mouseY, float partialTick);
+
     @Override
     public void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
         if (isVisible(mouseX, mouseY)) {
+            submit(graphics, mouseX, mouseY, partialTick);
             super.render(graphics, mouseX, mouseY, partialTick);
         }
     }

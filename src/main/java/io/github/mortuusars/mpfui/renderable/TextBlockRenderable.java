@@ -69,7 +69,7 @@ public class TextBlockRenderable extends MPFRenderable<TextBlockRenderable> {
     }
 
     @Override
-    public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
+    public void submit(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
         if (isVisible(mouseX, mouseY)) {
             this.isHovered = mouseX >= getX() && mouseY >= getY() && mouseX < getX() + this.width && mouseY < getY() + this.height;
             renderText(graphics, mouseX, mouseY, partialTick);
@@ -77,11 +77,6 @@ public class TextBlockRenderable extends MPFRenderable<TextBlockRenderable> {
             if (isHovered)
                 renderToolTip(graphics, mouseX, mouseY);
         }
-    }
-
-    @Override
-    protected void renderWidget(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY, float pPartialTick) {
-
     }
 
     @Override

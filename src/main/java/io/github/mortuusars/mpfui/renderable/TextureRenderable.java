@@ -42,20 +42,15 @@ public class TextureRenderable extends MPFRenderable<TextureRenderable> {
     }
 
     @Override
-    public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
+    public void submit(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
         if (isVisible(mouseX, mouseY)) {
             this.isHovered = mouseX >= getX() && mouseY >= getY() && mouseX < getX() + this.width && mouseY < getY() + this.height;
-            renderWidget(graphics, mouseX, mouseY, partialTick);
+            RenderSystem.setShader(GameRenderer::getPositionTexShader);
+            RenderSystem.setShaderColor(1, 1,1, this.alpha);
+            RenderSystem.setShaderTexture(0, texture);
+            int v = isHoveredOrFocused() ? vOffset + hoverVOffset : vOffset;
+            graphics.blit(texture, getX(), getY(), uOffset, v, width, height);
         }
-    }
-
-    @Override
-    protected void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float pPartialTick) {
-        RenderSystem.setShader(GameRenderer::getPositionTexShader);
-        RenderSystem.setShaderColor(1, 1,1, this.alpha);
-        RenderSystem.setShaderTexture(0, texture);
-        int v = isHoveredOrFocused() ? vOffset + hoverVOffset : vOffset;
-        graphics.blit(texture, getX(), getY(), uOffset, v, width, height);
     }
 
     @Override
