@@ -80,7 +80,7 @@ public class DeliveryTableScreen extends AbstractContainerScreen<DeliveryTableMe
                 graphics.renderTooltip(font, Component.translatable("gui.wares.delivery_table.no_agreement.tooltip"), mouseX, mouseY);
 
             if (Config.DELIVERIES_REQUIRE_BOXES.get()) {
-                Slot boxSlot = menu.slots.get(DeliveryTableBlockEntity.BOX_SLOT);
+                Slot boxSlot = menu.slots.get(DeliveryTableBlockEntity.PACKAGES_SLOT);
                 if (!boxSlot.hasItem() && isHovering(boxSlot.x, boxSlot.y, 18, 18, mouseX, mouseY))
                     graphics.renderTooltip(font, Component.translatable("gui.wares.delivery_table.no_packages.tooltip"), mouseX, mouseY);
             }
@@ -102,7 +102,7 @@ public class DeliveryTableScreen extends AbstractContainerScreen<DeliveryTableMe
 
         // PACKAGES SLOT
         if (Config.DELIVERIES_REQUIRE_BOXES.get()) {
-            Slot packagesSlot = menu.slots.get(DeliveryTableBlockEntity.BOX_SLOT);
+            Slot packagesSlot = menu.slots.get(DeliveryTableBlockEntity.PACKAGES_SLOT);
             graphics.blit(TEXTURE, leftPos + packagesSlot.x - 1, topPos + packagesSlot.y - 1, 176, 16, 18, 18);
 
             // Package placeholder

@@ -44,6 +44,7 @@ import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.items.IItemHandlerModifiable;
 import net.neoforged.neoforge.items.ItemStackHandler;
 import net.neoforged.neoforge.items.wrapper.SidedInvWrapper;
+import org.apache.commons.lang3.ArrayUtils;
 import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -57,12 +58,13 @@ import java.util.UUID;
 public class DeliveryTableBlockEntity extends BaseContainerBlockEntity implements WorldlyContainer {
     public static final int SLOTS = 14;
     public static final int AGREEMENT_SLOT = 0;
-    public static final int BOX_SLOT = 1;
-    public static final int[] AGREEMENT_SLOTS = new int[]{0};
-    public static final int[] AGREEMENT_PLUS_PACKAGES_SLOTS = new int[]{0, 1};
+    public static final int PACKAGES_SLOT = 1;
+    public static final int[] AGREEMENT_SLOTS = new int[]{AGREEMENT_SLOT};
+    public static final int[] PACKAGES_SLOTS = new int[]{PACKAGES_SLOT};
+    public static final int[] AGREEMENT_PLUS_PACKAGES_SLOTS = ArrayUtils.addAll(AGREEMENT_SLOTS, PACKAGES_SLOTS);
     public static final int[] INPUT_SLOTS = new int[]{2, 3, 4, 5, 6, 7};
     public static final int[] OUTPUT_SLOTS = new int[]{8, 9, 10, 11, 12, 13};
-    public static final int[] INPUT_PLUS_OUTPUT_SLOTS = new int[]{2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13};
+    public static final int[] INPUT_PLUS_OUTPUT_SLOTS = ArrayUtils.addAll(INPUT_SLOTS, OUTPUT_SLOTS);
 
     public static final int PACKAGER_WORK_RADIUS = 3;
     public static final int PACKAGER_LAST_WORK_THRESHOLD = 20 * 40; // 40 seconds = 800 ticks
@@ -251,7 +253,7 @@ public class DeliveryTableBlockEntity extends BaseContainerBlockEntity implement
 
     public int getBatchSize() {
         Optional<Villager> worker = getPackagerWorker(PACKAGER_WORK_RADIUS);
-        int packages = Config.DELIVERIES_REQUIRE_BOXES.get() ? getItem(BOX_SLOT).getCount() : Integer.MAX_VALUE;
+        int packages = Config.DELIVERIES_REQUIRE_BOXES.get() ? getItem(PACKAGES_SLOT).getCount() : Integer.MAX_VALUE;
         int villagerLevel = worker.map(villager -> villager.getVillagerData().getLevel()).orElse(1);
         return Math.min(packages, Config.getBatchSizeForLevel(villagerLevel));
     }
@@ -316,7 +318,7 @@ public class DeliveryTableBlockEntity extends BaseContainerBlockEntity implement
 
     private void consumePackage() {
         if (Config.DELIVERIES_REQUIRE_BOXES.get())
-            removeItem(BOX_SLOT, 1);
+            removeItem(PACKAGES_SLOT, 1);
     }
 
     protected Deliverability getDeliverability() {
@@ -333,7 +335,7 @@ public class DeliveryTableBlockEntity extends BaseContainerBlockEntity implement
     }
 
     protected boolean hasPackage() {
-        return !getItem(BOX_SLOT).isEmpty() || !Config.DELIVERIES_REQUIRE_BOXES.get();
+        return !getItem(PACKAGES_SLOT).isEmpty() || !Config.DELIVERIES_REQUIRE_BOXES.get();
     }
 
     protected boolean hasRequestedItems() {
@@ -435,7 +437,7 @@ public class DeliveryTableBlockEntity extends BaseContainerBlockEntity implement
             public boolean isItemValid(int slot, ItemStack stack) {
                 if (slot == AGREEMENT_SLOT)
                     return stack.getItem() instanceof DeliveryAgreementItem;
-                else if (slot == BOX_SLOT)
+                else if (slot == PACKAGES_SLOT)
                     return Config.DELIVERIES_REQUIRE_BOXES.get() && stack.is(Wares.Tags.Items.DELIVERY_BOXES);
                 return super.isItemValid(slot, stack);
             }
@@ -443,7 +445,7 @@ public class DeliveryTableBlockEntity extends BaseContainerBlockEntity implement
            
             @Override
             public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
-                if (slot == BOX_SLOT && !Config.DELIVERIES_REQUIRE_BOXES.get())
+                if (slot == PACKAGES_SLOT && !Config.DELIVERIES_REQUIRE_BOXES.get())
                     return stack;
                 return super.insertItem(slot, stack, simulate);
             }
@@ -541,7 +543,7 @@ public class DeliveryTableBlockEntity extends BaseContainerBlockEntity implement
 
     public boolean canPlaceItem(int slotIndex, ItemStack stack) {
         return (slotIndex == AGREEMENT_SLOT && stack.getItem() instanceof DeliveryAgreementItem)
-                || (slotIndex == BOX_SLOT && stack.is(Wares.Tags.Items.DELIVERY_BOXES))
+                || (slotIndex == PACKAGES_SLOT && stack.is(Wares.Tags.Items.DELIVERY_BOXES))
                 || (slotIndex >= INPUT_SLOTS[0] && slotIndex < OUTPUT_SLOTS[0]);
     }
 
