@@ -2,7 +2,7 @@ package com.flarelabsmc.wares.client.gui.screen;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.flarelabsmc.wares.Wares;
-import com.flarelabsmc.wares.block.entity.DeliveryTableBlockEntity;
+import com.flarelabsmc.wares.content.block.entity.DeliveryTableBlockEntity;
 import com.flarelabsmc.wares.config.Config;
 import com.flarelabsmc.wares.menu.DeliveryTableMenu;
 import net.minecraft.ChatFormatting;

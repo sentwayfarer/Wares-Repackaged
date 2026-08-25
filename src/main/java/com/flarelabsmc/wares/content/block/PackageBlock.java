@@ -1,7 +1,7 @@
-package com.flarelabsmc.wares.block;
+package com.flarelabsmc.wares.content.block;
 
 import com.flarelabsmc.wares.Wares;
-import com.flarelabsmc.wares.block.entity.PackageBlockEntity;
+import com.flarelabsmc.wares.content.block.entity.PackageBlockEntity;
 import com.flarelabsmc.wares.config.Config;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;

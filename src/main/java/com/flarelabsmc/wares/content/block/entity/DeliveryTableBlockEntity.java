@@ -1,14 +1,14 @@
-package com.flarelabsmc.wares.block.entity;
+package com.flarelabsmc.wares.content.block.entity;
 
 import com.flarelabsmc.wares.Wares;
-import com.flarelabsmc.wares.advancement.DeliveryTableTrigger;
-import com.flarelabsmc.wares.block.DeliveryTableBlock;
+import com.flarelabsmc.wares.content.advancement.DeliveryTableTrigger;
+import com.flarelabsmc.wares.content.block.DeliveryTableBlock;
 import com.flarelabsmc.wares.config.Config;
 import com.flarelabsmc.wares.data.agreement.DeliveryAgreement;
 import com.flarelabsmc.wares.data.agreement.AgreementType;
 import com.flarelabsmc.wares.data.agreement.component.RequestedItem;
 import com.flarelabsmc.wares.integration.kubejs.KubeJSIntegration;
-import com.flarelabsmc.wares.item.DeliveryAgreementItem;
+import com.flarelabsmc.wares.content.item.DeliveryAgreementItem;
 import com.flarelabsmc.wares.menu.DeliveryTableMenu;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.Util;

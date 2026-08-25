@@ -1,12 +1,12 @@
-package com.flarelabsmc.wares.block;
+package com.flarelabsmc.wares.content.block;
 
 import com.mojang.serialization.MapCodec;
 import com.flarelabsmc.wares.Wares;
-import com.flarelabsmc.wares.block.entity.DeliveryTableBlockEntity;
+import com.flarelabsmc.wares.content.block.entity.DeliveryTableBlockEntity;
 import com.flarelabsmc.wares.client.gui.agreement.AgreementGUI;
 import com.flarelabsmc.wares.data.agreement.DeliveryAgreement;
 import com.flarelabsmc.wares.data.agreement.AgreementType;
-import com.flarelabsmc.wares.item.DeliveryAgreementItem;
+import com.flarelabsmc.wares.content.item.DeliveryAgreementItem;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;

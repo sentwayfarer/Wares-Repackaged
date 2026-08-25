@@ -1,4 +1,4 @@
-package com.flarelabsmc.wares.components;
+package com.flarelabsmc.wares.content.components;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;

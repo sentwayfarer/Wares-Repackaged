@@ -1,7 +1,7 @@
 package com.flarelabsmc.wares.menu;
 
 import com.flarelabsmc.wares.Wares;
-import com.flarelabsmc.wares.block.entity.DeliveryTableBlockEntity;
+import com.flarelabsmc.wares.content.block.entity.DeliveryTableBlockEntity;
 import com.flarelabsmc.wares.config.Config;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;

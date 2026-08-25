@@ -1,4 +1,4 @@
-package com.flarelabsmc.wares.item;
+package com.flarelabsmc.wares.content.item;
 
 import com.flarelabsmc.wares.Wares;
 import com.flarelabsmc.wares.menu.CardboardBoxMenu;

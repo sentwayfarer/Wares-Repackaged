@@ -1,4 +1,4 @@
-package com.flarelabsmc.wares.block;
+package com.flarelabsmc.wares.content.block;
 
 import com.mojang.logging.LogUtils;
 import com.flarelabsmc.wares.config.Config;

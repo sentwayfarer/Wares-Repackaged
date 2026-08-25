@@ -1,4 +1,4 @@
-package com.flarelabsmc.wares.block.entity;
+package com.flarelabsmc.wares.content.block.entity;
 
 public enum Deliverability {
     CAN_DELIVER,

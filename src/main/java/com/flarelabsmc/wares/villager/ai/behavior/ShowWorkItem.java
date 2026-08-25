@@ -2,7 +2,7 @@ package com.flarelabsmc.wares.villager.ai.behavior;
 
 import com.google.common.collect.ImmutableMap;
 import com.flarelabsmc.wares.Wares;
-import com.flarelabsmc.wares.block.entity.DeliveryTableBlockEntity;
+import com.flarelabsmc.wares.content.block.entity.DeliveryTableBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.server.level.ServerLevel;

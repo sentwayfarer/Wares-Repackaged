@@ -1,4 +1,4 @@
-package com.flarelabsmc.wares.advancement;
+package com.flarelabsmc.wares.content.advancement;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;

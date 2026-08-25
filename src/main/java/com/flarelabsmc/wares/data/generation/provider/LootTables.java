@@ -3,7 +3,7 @@ package com.flarelabsmc.wares.data.generation.provider;
 import com.google.common.base.Preconditions;
 import com.mojang.datafixers.util.Pair;
 import com.flarelabsmc.wares.Wares;
-import com.flarelabsmc.wares.block.CardboardBoxBlock;
+import com.flarelabsmc.wares.content.block.CardboardBoxBlock;
 import com.flarelabsmc.wares.data.agreement.SealedDeliveryAgreement;
 import com.flarelabsmc.wares.data.agreement.component.SteppedInt;
 import net.minecraft.advancements.critereon.StatePropertiesPredicate;

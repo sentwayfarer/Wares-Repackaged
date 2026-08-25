@@ -1,8 +1,8 @@
 package com.flarelabsmc.wares.event;
 
 import com.flarelabsmc.wares.Wares;
-import com.flarelabsmc.wares.block.PackageDispenseBehavior;
-import com.flarelabsmc.wares.command.WaresCommand;
+import com.flarelabsmc.wares.content.block.PackageDispenseBehavior;
+import com.flarelabsmc.wares.content.command.WaresCommand;
 import com.flarelabsmc.wares.config.Config;
 import com.flarelabsmc.wares.data.agreement.SealedDeliveryAgreement;
 import com.flarelabsmc.wares.data.agreement.component.SteppedInt;

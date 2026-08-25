@@ -1,4 +1,4 @@
-package com.flarelabsmc.wares.block.entity;
+package com.flarelabsmc.wares.content.block.entity;
 
 import com.flarelabsmc.wares.Wares;
 import com.flarelabsmc.wares.data.Package;

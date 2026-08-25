@@ -1,8 +1,8 @@
-package com.flarelabsmc.wares.advancement;
+package com.flarelabsmc.wares.content.advancement;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.flarelabsmc.wares.block.entity.DeliveryTableBlockEntity;
+import com.flarelabsmc.wares.content.block.entity.DeliveryTableBlockEntity;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.advancements.critereon.*;
 import net.minecraft.core.BlockPos;

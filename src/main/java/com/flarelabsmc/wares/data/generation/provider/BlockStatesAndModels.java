@@ -1,8 +1,8 @@
 package com.flarelabsmc.wares.data.generation.provider;
 
 import com.flarelabsmc.wares.Wares;
-import com.flarelabsmc.wares.block.CardboardBoxBlock;
-import com.flarelabsmc.wares.block.DeliveryTableBlock;
+import com.flarelabsmc.wares.content.block.CardboardBoxBlock;
+import com.flarelabsmc.wares.content.block.DeliveryTableBlock;
 import com.flarelabsmc.wares.data.agreement.AgreementType;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;

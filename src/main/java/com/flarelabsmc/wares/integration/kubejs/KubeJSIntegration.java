@@ -2,7 +2,7 @@ package com.flarelabsmc.wares.integration.kubejs;
 
 import com.google.common.base.Supplier;
 import com.google.common.base.Suppliers;
-import com.flarelabsmc.wares.block.entity.DeliveryTableBlockEntity;
+import com.flarelabsmc.wares.content.block.entity.DeliveryTableBlockEntity;
 import com.flarelabsmc.wares.integration.kubejs.event.DeliveryKubeEvent;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.fml.ModList;

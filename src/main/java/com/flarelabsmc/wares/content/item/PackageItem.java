@@ -1,7 +1,7 @@
-package com.flarelabsmc.wares.item;
+package com.flarelabsmc.wares.content.item;
 
 import com.flarelabsmc.wares.Wares;
-import com.flarelabsmc.wares.block.entity.PackageBlockEntity;
+import com.flarelabsmc.wares.content.block.entity.PackageBlockEntity;
 import com.flarelabsmc.wares.config.Config;
 import com.flarelabsmc.wares.data.Package;
 import net.minecraft.ChatFormatting;

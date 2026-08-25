@@ -1,4 +1,4 @@
-package com.flarelabsmc.wares.command;
+package com.flarelabsmc.wares.content.command;
 
 import com.flarelabsmc.wares.data.agreement.DeliveryAgreement;
 import com.flarelabsmc.wares.data.agreement.SealedDeliveryAgreement;

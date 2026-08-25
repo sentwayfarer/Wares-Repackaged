@@ -1,4 +1,4 @@
-package com.flarelabsmc.wares.block;
+package com.flarelabsmc.wares.content.block;
 
 import com.flarelabsmc.wares.Wares;
 import com.flarelabsmc.wares.util.VoxelShapeUtils;

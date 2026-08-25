@@ -1,6 +1,6 @@
 package com.flarelabsmc.wares.util;
 
-import com.flarelabsmc.wares.block.entity.DeliveryTableBlockEntity;
+import com.flarelabsmc.wares.content.block.entity.DeliveryTableBlockEntity;
 import com.flarelabsmc.wares.client.gui.screen.DeliveryTableScreen;
 import com.flarelabsmc.wares.data.agreement.DeliveryAgreement;
 import net.minecraft.client.Minecraft;
