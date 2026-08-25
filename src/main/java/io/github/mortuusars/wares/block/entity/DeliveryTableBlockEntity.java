@@ -44,6 +44,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.items.IItemHandlerModifiable;
+import net.neoforged.neoforge.items.ItemStackHandler;
+import net.neoforged.neoforge.items.wrapper.SidedInvWrapper;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -97,7 +99,7 @@ public class DeliveryTableBlockEntity extends BaseContainerBlockEntity implement
     };
 
     protected final ItemStackHandler inventory;
-    protected LazyOptional<IItemHandlerModifiable>[] inventoryHandlers;
+    protected SidedInvWrapper[] inventoryHandlers;
     protected int progress = 0;
     protected boolean canDeliverManually = false;
     protected boolean deliveringManually = false;
@@ -110,7 +112,11 @@ public class DeliveryTableBlockEntity extends BaseContainerBlockEntity implement
     public DeliveryTableBlockEntity(BlockPos pos, BlockState blockState) {
         super(Wares.BlockEntities.DELIVERY_TABLE.get(), pos, blockState);
         inventory = createInventory(SLOTS);
-        inventoryHandlers = SidedInvWrapper.create(this, Direction.DOWN, Direction.UP, Direction.NORTH);
+        inventoryHandlers = new SidedInvWrapper[]{
+                new SidedInvWrapper(this, Direction.DOWN),
+                new SidedInvWrapper(this, Direction.NORTH),
+                new SidedInvWrapper(this, Direction.UP)
+        };
     }
 
     public void serverTick() {
