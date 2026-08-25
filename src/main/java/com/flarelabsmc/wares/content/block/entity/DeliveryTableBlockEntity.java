@@ -12,6 +12,7 @@ import com.flarelabsmc.wares.content.item.DeliveryAgreementItem;
 import com.flarelabsmc.wares.menu.DeliveryTableMenu;
 import com.flarelabsmc.wares.registry.WaresBlockEntities;
 import com.flarelabsmc.wares.registry.WaresItems;
+import com.flarelabsmc.wares.registry.WaresProfessions;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.Util;
 import net.minecraft.core.*;
@@ -239,7 +240,7 @@ public class DeliveryTableBlockEntity extends BaseContainerBlockEntity implement
         List<Villager> villagersInRadius = level.getEntitiesOfClass(Villager.class, new AABB(getBlockPos()).inflate(radius));
 
         for (Villager villager : villagersInRadius) {
-            if (villager.getVillagerData().getProfession() == Wares.Villagers.PACKAGER.get()) {
+            if (villager.getVillagerData().getProfession() == WaresProfessions.PACKAGER.get()) {
                 Optional<GlobalPos> jobSiteMemory = villager.getBrain().getMemory(MemoryModuleType.JOB_SITE);
                 if (jobSiteMemory.isPresent() && jobSiteMemory.get().pos().equals(getBlockPos()))
                     return Optional.of(villager);

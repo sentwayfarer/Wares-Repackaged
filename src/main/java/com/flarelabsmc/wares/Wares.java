@@ -1,9 +1,6 @@
 package com.flarelabsmc.wares;
 
-import com.flarelabsmc.wares.registry.WaresBlockEntities;
-import com.flarelabsmc.wares.registry.WaresBlocks;
-import com.flarelabsmc.wares.registry.WaresItems;
-import com.flarelabsmc.wares.registry.WaresMenuTypes;
+import com.flarelabsmc.wares.registry.*;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableSet;
 import com.mojang.logging.LogUtils;
@@ -53,8 +50,8 @@ public class Wares
         WaresBlockEntities.register(bus);
         WaresMenuTypes.register(bus);
         WaresItems.register(bus);
-        Villagers.POI_TYPES.register(bus);
-        Villagers.PROFESSIONS.register(bus);
+        WaresPoiTypes.register(bus);
+        WaresProfessions.register(bus);
         SoundEvents.SOUNDS.register(bus);
 
         NeoForge.EVENT_BUS.addListener(VillageStructures::addVillageStructures);
@@ -65,20 +62,6 @@ public class Wares
      */
     public static ResourceLocation resource(String path) {
         return ResourceLocation.fromNamespaceAndPath(ID, path);
-    }
-
-
-    public static class Villagers {
-        public static final DeferredRegister<PoiType> POI_TYPES = DeferredRegister.create(BuiltInRegistries.POINT_OF_INTEREST_TYPE, Wares.ID);
-        public static final DeferredRegister<VillagerProfession> PROFESSIONS = DeferredRegister.create(BuiltInRegistries.VILLAGER_PROFESSION, Wares.ID);
-
-
-        public static final DeferredHolder<PoiType, PoiType> DELIVERY_TABLE_POI = POI_TYPES.register(WaresBlocks.DELIVERY_TABLE.getId().getPath(),
-                () -> new PoiType(ImmutableSet.copyOf(WaresBlocks.DELIVERY_TABLE.get().getStateDefinition().getPossibleStates()), 1, 1));
-
-        public static final DeferredHolder<VillagerProfession, VillagerProfession> PACKAGER = PROFESSIONS.register("packager",
-                () -> new VillagerProfession("packager", poi -> poi.is(Objects.requireNonNull(DELIVERY_TABLE_POI.getKey())), poi -> poi.is(Objects.requireNonNull(DELIVERY_TABLE_POI.getKey())),
-                        ImmutableSet.of(), ImmutableSet.of(), null));
     }
 
     public static class SoundEvents {
