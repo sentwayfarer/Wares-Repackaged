@@ -12,8 +12,8 @@ import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.SlotItemHandler;
+import net.neoforged.neoforge.items.IItemHandlerModifiable;
+import net.neoforged.neoforge.items.SlotItemHandler;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
@@ -29,7 +29,7 @@ public class DeliveryTableMenu extends AbstractContainerMenu {
         this.blockEntity = blockEntity;
         this.data = containerData;
 
-        IItemHandler itemHandler = blockEntity.getInventory();
+        IItemHandlerModifiable itemHandler = blockEntity.getInventory();
         {
             // AGREEMENT
             this.addSlot(new SlotItemHandler(itemHandler, DeliveryTableBlockEntity.AGREEMENT_SLOT, 80, 16) {
