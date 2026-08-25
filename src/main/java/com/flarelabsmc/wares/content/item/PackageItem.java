@@ -4,6 +4,7 @@ import com.flarelabsmc.wares.Wares;
 import com.flarelabsmc.wares.content.block.entity.PackageBlockEntity;
 import com.flarelabsmc.wares.config.Config;
 import com.flarelabsmc.wares.data.Package;
+import com.flarelabsmc.wares.registry.WaresStats;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
@@ -108,7 +109,7 @@ public class PackageItem extends BlockItem {
                     1f, level.getRandom().nextFloat() * 0.2f + 0.9f);
 
             if (livingEntity instanceof ServerPlayer serverPlayer)
-                serverPlayer.awardStat(Wares.Stats.PACKAGES_OPENED);
+                serverPlayer.awardStat(WaresStats.PACKAGES_OPENED);
         }
 
 

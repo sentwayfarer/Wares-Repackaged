@@ -7,6 +7,7 @@ import com.flarelabsmc.wares.config.Config;
 import com.flarelabsmc.wares.data.agreement.SealedDeliveryAgreement;
 import com.flarelabsmc.wares.data.agreement.component.SteppedInt;
 import com.flarelabsmc.wares.registry.WaresItems;
+import com.flarelabsmc.wares.registry.WaresStats;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.DispenserBlock;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -23,7 +24,7 @@ public class CommonEvents {
         public static void commonSetup(FMLCommonSetupEvent event) {
             event.enqueueWork(() -> {
                 Wares.AdvancementTriggers.register();
-                Wares.Stats.register();
+                WaresStats.register();
                 DispenserBlock.registerBehavior(WaresItems.PACKAGE.get(), new PackageDispenseBehavior());
             });
         }

@@ -1,6 +1,7 @@
 package com.flarelabsmc.wares.content.block;
 
 import com.flarelabsmc.wares.registry.WaresBlockEntities;
+import com.flarelabsmc.wares.registry.WaresStats;
 import com.mojang.serialization.MapCodec;
 import com.flarelabsmc.wares.Wares;
 import com.flarelabsmc.wares.content.block.entity.DeliveryTableBlockEntity;
@@ -117,7 +118,7 @@ public class DeliveryTableBlock extends BaseEntityBlock {
     {
         if (player instanceof ServerPlayer serverPlayer) {
             blockEntity.trySetOwner(serverPlayer);
-            player.awardStat(Wares.Stats.INTERACT_WITH_DELIVERY_TABLE);
+            player.awardStat(WaresStats.INTERACT_WITH_DELIVERY_TABLE);
         }
     }
 

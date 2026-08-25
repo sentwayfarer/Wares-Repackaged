@@ -6,6 +6,7 @@ import com.flarelabsmc.wares.config.Config;
 import com.flarelabsmc.wares.data.agreement.DeliveryAgreement;
 import com.flarelabsmc.wares.data.agreement.SealedDeliveryAgreement;
 import com.flarelabsmc.wares.registry.WaresItems;
+import com.flarelabsmc.wares.registry.WaresStats;
 import com.flarelabsmc.wares.util.ClientHelper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
@@ -143,7 +144,7 @@ public class SealedDeliveryAgreementItem extends Item {
                 }
 
                 if (agreement.toItemStack(agreementStack)) {
-                    player.awardStat(Wares.Stats.SEALED_LETTERS_OPENED);
+                    player.awardStat(WaresStats.SEALED_LETTERS_OPENED);
                     level.playSound(null,
                             player.position().x,
                             player.position().y,
