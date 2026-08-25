@@ -63,7 +63,10 @@ public class DeliveryTableBlock extends BaseEntityBlock {
 
     @Override
     public MenuProvider getMenuProvider(BlockState state, Level level, BlockPos pos) {
+        if (!(level.getBlockEntity(pos) instanceof DeliveryTableBlockEntity blockEntity))
+            return null;
 
+        return blockEntity;
     }
 
     @Override
