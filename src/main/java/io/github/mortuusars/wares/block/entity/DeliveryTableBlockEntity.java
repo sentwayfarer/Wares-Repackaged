@@ -54,15 +54,12 @@ import java.util.UUID;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-@SuppressWarnings({"SameParameterValue", "BooleanMethodIsAlwaysInverted", "unused"})
 public class DeliveryTableBlockEntity extends BaseContainerBlockEntity implements WorldlyContainer {
     public static final int SLOTS = 14;
     public static final int AGREEMENT_SLOT = 0;
     public static final int BOX_SLOT = 1;
     public static final int[] AGREEMENT_SLOTS = new int[]{0};
     public static final int[] AGREEMENT_PLUS_PACKAGES_SLOTS = new int[]{0, 1};
-    public static final int[] INPUT_PLUS_AGREEMENT_PLUS_PACKAGES_SLOTS = new int[]{0, 1, 2, 3, 4, 5, 6, 7};
-    public static final int[] INPUT_PLUS_PACKAGES_SLOTS = new int[]{1, 2, 3, 4, 5, 6, 7};
     public static final int[] INPUT_SLOTS = new int[]{2, 3, 4, 5, 6, 7};
     public static final int[] OUTPUT_SLOTS = new int[]{8, 9, 10, 11, 12, 13};
     public static final int[] INPUT_PLUS_OUTPUT_SLOTS = new int[]{2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13};
@@ -111,7 +108,7 @@ public class DeliveryTableBlockEntity extends BaseContainerBlockEntity implement
 
     public DeliveryTableBlockEntity(BlockPos pos, BlockState blockState) {
         super(Wares.BlockEntities.DELIVERY_TABLE.get(), pos, blockState);
-        inventory = createInventory(SLOTS);
+        inventory = createInventory();
         inventoryHandlers = new SidedInvWrapper[]{
                 new SidedInvWrapper(this, Direction.DOWN),
                 new SidedInvWrapper(this, Direction.NORTH),
@@ -432,8 +429,8 @@ public class DeliveryTableBlockEntity extends BaseContainerBlockEntity implement
 
     // <Container>
 
-    protected ItemStackHandler createInventory(int slots) {
-        return new ItemStackHandler(slots) {
+    protected ItemStackHandler createInventory() {
+        return new ItemStackHandler(SLOTS) {
             @Override
             public boolean isItemValid(int slot, ItemStack stack) {
                 if (slot == AGREEMENT_SLOT)
@@ -698,7 +695,7 @@ public class DeliveryTableBlockEntity extends BaseContainerBlockEntity implement
         return null;
     }
 
-    public void onPlacedBy(LivingEntity placer, ItemStack stack) {
+    public void onPlacedBy(LivingEntity placer) {
         if (placer instanceof ServerPlayer serverPlayer) {
             trySetOwner(serverPlayer);
         }

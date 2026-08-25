@@ -291,7 +291,7 @@ public class DeliveryTableBlock extends BaseEntityBlock {
         if (!(level.getBlockEntity(pos) instanceof DeliveryTableBlockEntity deliveryTableBlockEntity))
             return;
 
-        deliveryTableBlockEntity.onPlacedBy(placer, stack);
+        deliveryTableBlockEntity.onPlacedBy(placer);
     }
 
     @Override
