@@ -5,6 +5,7 @@ import com.flarelabsmc.wares.menu.CardboardBoxMenu;
 import com.flarelabsmc.wares.menu.DeliveryTableMenu;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.inventory.MenuType;
+import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.common.extensions.IMenuTypeExtension;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -17,4 +18,8 @@ public class WaresMenuTypes {
 
     public static final DeferredHolder<MenuType<?>, MenuType<CardboardBoxMenu>> CARDBOARD_BOX = MENU_TYPES
             .register("cardboard_box", () -> IMenuTypeExtension.create(CardboardBoxMenu::fromBuffer));
+
+    public static void register(IEventBus eventBus) {
+        MENU_TYPES.register(eventBus);
+    }
 }

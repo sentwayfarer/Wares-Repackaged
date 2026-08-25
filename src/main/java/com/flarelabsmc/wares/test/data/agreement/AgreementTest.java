@@ -1,8 +1,8 @@
 package com.flarelabsmc.wares.test.data.agreement;
 
-import com.flarelabsmc.wares.Wares;
 import com.flarelabsmc.wares.data.agreement.DeliveryAgreement;
 import com.flarelabsmc.wares.data.agreement.component.RequestedItem;
+import com.flarelabsmc.wares.registry.WaresItems;
 import com.flarelabsmc.wares.test.framework.ITestClass;
 import com.flarelabsmc.wares.test.framework.Test;
 import net.minecraft.network.chat.Component;
@@ -100,7 +100,7 @@ public class AgreementTest implements ITestClass {
                         .expireTime(10_000)
                         .build();
 
-                ItemStack agreementStack = new ItemStack(Wares.Items.DELIVERY_AGREEMENT.get());
+                ItemStack agreementStack = new ItemStack(WaresItems.DELIVERY_AGREEMENT.get());
                 agreement.toItemStack(agreementStack);
 
                 Optional<DeliveryAgreement> decoded = DeliveryAgreement.fromItemStack(agreementStack);

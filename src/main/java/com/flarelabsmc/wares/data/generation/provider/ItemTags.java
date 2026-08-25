@@ -1,6 +1,7 @@
 package com.flarelabsmc.wares.data.generation.provider;
 
 import com.flarelabsmc.wares.Wares;
+import com.flarelabsmc.wares.registry.WaresItems;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.tags.ItemTagsProvider;
@@ -23,17 +24,17 @@ public class ItemTags extends ItemTagsProvider {
     @Override
     protected void addTags(HolderLookup.@NotNull Provider provider) {
         tag(Wares.Tags.Items.AGREEMENTS)
-                .add(Wares.Items.SEALED_DELIVERY_AGREEMENT.get(),
-                     Wares.Items.DELIVERY_AGREEMENT.get(),
-                     Wares.Items.COMPLETED_DELIVERY_AGREEMENT.get(),
-                     Wares.Items.EXPIRED_DELIVERY_AGREEMENT.get());
+                .add(WaresItems.SEALED_DELIVERY_AGREEMENT.get(),
+                     WaresItems.DELIVERY_AGREEMENT.get(),
+                     WaresItems.COMPLETED_DELIVERY_AGREEMENT.get(),
+                     WaresItems.EXPIRED_DELIVERY_AGREEMENT.get());
 
         tag(Wares.Tags.Items.DELIVERY_BOXES)
-                .add(Wares.Items.CARDBOARD_BOX.get());
+                .add(WaresItems.CARDBOARD_BOX.get());
 
         tag(Wares.Tags.Items.CARDBOARD_BOX_BLACKLISTED)
-                .add(Wares.Items.PACKAGE.get(),
-                     Wares.Items.CARDBOARD_BOX.get());
+                .add(WaresItems.PACKAGE.get(),
+                     WaresItems.CARDBOARD_BOX.get());
     }
 
     private void optionalTags(TagAppender<Item> tag, String namespace, String... items) {

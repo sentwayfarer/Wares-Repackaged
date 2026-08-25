@@ -1,5 +1,6 @@
 package com.flarelabsmc.wares.content.block;
 
+import com.flarelabsmc.wares.registry.WaresBlockEntities;
 import com.mojang.serialization.MapCodec;
 import com.flarelabsmc.wares.Wares;
 import com.flarelabsmc.wares.content.block.entity.DeliveryTableBlockEntity;
@@ -107,7 +108,7 @@ public class DeliveryTableBlock extends BaseEntityBlock {
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> blockEntityType) {
         return !level.isClientSide ?
-                createTickerHelper(blockEntityType, Wares.BlockEntities.DELIVERY_TABLE.get(),
+                createTickerHelper(blockEntityType, WaresBlockEntities.DELIVERY_TABLE.get(),
                         (lv, pos, st, blockEntity) -> blockEntity.serverTick())
                 : null;
     }

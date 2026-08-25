@@ -1,7 +1,7 @@
 package com.flarelabsmc.wares.content.block.entity;
 
-import com.flarelabsmc.wares.Wares;
 import com.flarelabsmc.wares.data.agreement.DeliveryAgreement;
+import com.flarelabsmc.wares.registry.WaresItems;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.StringRepresentable;
@@ -81,10 +81,10 @@ public class AgreementTableLock {
 
     public enum UnlockBehavior implements StringRepresentable {
         NEVER("never", stack -> false),
-        WHEN_COMPLETED("completed", stack -> stack.is(Wares.Items.COMPLETED_DELIVERY_AGREEMENT.get())),
-        WHEN_EXPIRED("expired", stack -> stack.is(Wares.Items.EXPIRED_DELIVERY_AGREEMENT.get())),
+        WHEN_COMPLETED("completed", stack -> stack.is(WaresItems.COMPLETED_DELIVERY_AGREEMENT.get())),
+        WHEN_EXPIRED("expired", stack -> stack.is(WaresItems.EXPIRED_DELIVERY_AGREEMENT.get())),
         COMPLETED_OR_EXPIRED("completed_or_expired", stack ->
-                stack.is(Wares.Items.COMPLETED_DELIVERY_AGREEMENT.get()) || stack.is(Wares.Items.EXPIRED_DELIVERY_AGREEMENT.get()));
+                stack.is(WaresItems.COMPLETED_DELIVERY_AGREEMENT.get()) || stack.is(WaresItems.EXPIRED_DELIVERY_AGREEMENT.get()));
 
         private final String name;
         private final Predicate<ItemStack> predicate;

@@ -1,5 +1,6 @@
 package com.flarelabsmc.wares.mixin;
 
+import com.flarelabsmc.wares.registry.WaresItems;
 import com.google.common.collect.ImmutableList;
 import com.mojang.datafixers.util.Pair;
 import com.flarelabsmc.wares.Wares;
@@ -24,7 +25,7 @@ public abstract class VillagerGoalPackagesMixin {
                                        CallbackInfoReturnable<ImmutableList<Pair<Integer, ? extends Behavior<? super Villager>>>> cir) {
         if (profession == Wares.Villagers.PACKAGER.get()) {
             List<Pair<Integer, ? extends Behavior<? super Villager>>> villagerList = new ArrayList<>(cir.getReturnValue());
-            villagerList.add(Pair.of(11, new ShowWorkItem(new ItemStack(Wares.Items.CARDBOARD_BOX.get()), 30, 150)));
+            villagerList.add(Pair.of(11, new ShowWorkItem(new ItemStack(WaresItems.CARDBOARD_BOX.get()), 30, 150)));
             cir.setReturnValue(ImmutableList.copyOf(villagerList));
         }
     }

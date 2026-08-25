@@ -1,6 +1,6 @@
 package com.flarelabsmc.wares.data.generation.provider;
 
-import com.flarelabsmc.wares.Wares;
+import com.flarelabsmc.wares.registry.WaresItems;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.RecipeCategory;
@@ -21,7 +21,7 @@ public class Recipes extends RecipeProvider {
 
     @Override
     protected void buildRecipes(@NotNull Consumer<FinishedRecipe> recipeConsumer) {
-        ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, Wares.Items.DELIVERY_TABLE.get())
+        ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, WaresItems.DELIVERY_TABLE.get())
                 .unlockedBy("has_ink_sac", has(Items.INK_SAC))
                 .unlockedBy("has_feather", has(Tags.Items.FEATHERS))
                 .pattern("IF ")
@@ -32,7 +32,7 @@ public class Recipes extends RecipeProvider {
                 .define('W', ItemTags.PLANKS)
                 .save(recipeConsumer);
 
-        ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, Wares.Items.CARDBOARD_BOX.get(), 2)
+        ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, WaresItems.CARDBOARD_BOX.get(), 2)
                 .unlockedBy("has_paper", has(Items.PAPER))
                 .pattern("PP ")
                 .pattern("PP ")

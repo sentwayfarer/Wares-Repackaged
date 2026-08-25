@@ -8,6 +8,7 @@ import com.flarelabsmc.wares.content.item.SealedDeliveryAgreementItem;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
+import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
@@ -35,4 +36,8 @@ public class WaresItems {
     public static final DeferredHolder<Item, PackageItem> PACKAGE = ITEMS.register("package", () ->
             new PackageItem(WaresBlocks.PACKAGE.get(), new Item.Properties()
                     .stacksTo(1)));
+
+    public static void register(IEventBus eventBus) {
+        ITEMS.register(eventBus);
+    }
 }

@@ -4,6 +4,7 @@ import com.flarelabsmc.wares.Wares;
 import com.flarelabsmc.wares.content.block.CardboardBoxBlock;
 import com.flarelabsmc.wares.content.block.DeliveryTableBlock;
 import com.flarelabsmc.wares.data.agreement.AgreementType;
+import com.flarelabsmc.wares.registry.WaresBlocks;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minecraft.core.Direction;
@@ -21,9 +22,9 @@ public class BlockStatesAndModels extends BlockStateProvider {
 
     @Override
     protected void registerStatesAndModels() {
-        String table_path = Wares.Blocks.DELIVERY_TABLE.getId().getPath();
+        String table_path = WaresBlocks.DELIVERY_TABLE.getId().getPath();
 
-        getVariantBuilder(Wares.Blocks.DELIVERY_TABLE.get()).forAllStates(state -> {
+        getVariantBuilder(WaresBlocks.DELIVERY_TABLE.get()).forAllStates(state -> {
             AgreementType agreement = state.getValue(DeliveryTableBlock.AGREEMENT);
             String agreement_suffix = agreement == AgreementType.NONE ? "" : "_agreement_" + agreement.getSerializedName();
             ModelFile.ExistingModelFile model = models().getExistingFile(
@@ -34,12 +35,12 @@ public class BlockStatesAndModels extends BlockStateProvider {
                     .build();
         });
 
-        getVariantBuilder(Wares.Blocks.CARDBOARD_BOX.get()).forAllStates(state -> {
+        getVariantBuilder(WaresBlocks.CARDBOARD_BOX.get()).forAllStates(state -> {
             Int2ObjectMap<String> PACKAGES = new Int2ObjectOpenHashMap<>(
                     new int[]{1, 2, 3, 4},
                     new String[]{"one", "two", "three", "four"});
             ModelFile.ExistingModelFile model = models().getExistingFile(
-                    modLoc("block/" + Wares.Blocks.CARDBOARD_BOX.getId()
+                    modLoc("block/" + WaresBlocks.CARDBOARD_BOX.getId()
                             .getPath() + "_" + PACKAGES.get(state.getValue(CardboardBoxBlock.BOXES).intValue())));
             return ConfiguredModel.builder()
                     .modelFile(model)
@@ -47,6 +48,6 @@ public class BlockStatesAndModels extends BlockStateProvider {
                     .build();
         });
 
-        horizontalBlock(Wares.Blocks.PACKAGE.get(), models().getExistingFile(modLoc("block/" + Wares.Blocks.PACKAGE.getId().getPath())));
+        horizontalBlock(WaresBlocks.PACKAGE.get(), models().getExistingFile(modLoc("block/" + WaresBlocks.PACKAGE.getId().getPath())));
     }
 }

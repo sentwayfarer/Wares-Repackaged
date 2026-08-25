@@ -1,6 +1,7 @@
 package com.flarelabsmc.wares.data.generation.provider;
 
 import com.flarelabsmc.wares.Wares;
+import com.flarelabsmc.wares.registry.WaresItems;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.FrameType;
 import net.minecraft.advancements.critereon.InventoryChangeTrigger;
@@ -34,13 +35,13 @@ public class Advancements extends ForgeAdvancementProvider
 
             Advancement.Builder.advancement()
                 .parent(new ResourceLocation("minecraft:adventure/root"))
-                .display(Wares.Items.COMPLETED_DELIVERY_AGREEMENT.get(),
+                .display(WaresItems.COMPLETED_DELIVERY_AGREEMENT.get(),
                         Component.translatable("advancement.wares.last_minutes.title"),
                         Component.translatable("advancement.wares.last_minutes.description"), null, FrameType.CHALLENGE,
                         true, true, true)
                 .addCriterion("almost_expired", InventoryChangeTrigger.TriggerInstance.hasItems(
                         ItemPredicate.Builder.item()
-                                .of(Wares.Items.COMPLETED_DELIVERY_AGREEMENT.get())
+                                .of(WaresItems.COMPLETED_DELIVERY_AGREEMENT.get())
                                 .hasNbt(almostExpiredTag)
                                 .build()))
                 .save(saver, Wares.resource("adventure/at_the_last_minutes"), existingFileHelper);

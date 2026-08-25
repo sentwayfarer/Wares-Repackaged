@@ -6,6 +6,7 @@ import com.flarelabsmc.wares.content.command.WaresCommand;
 import com.flarelabsmc.wares.config.Config;
 import com.flarelabsmc.wares.data.agreement.SealedDeliveryAgreement;
 import com.flarelabsmc.wares.data.agreement.component.SteppedInt;
+import com.flarelabsmc.wares.registry.WaresItems;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.DispenserBlock;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -23,7 +24,7 @@ public class CommonEvents {
             event.enqueueWork(() -> {
                 Wares.AdvancementTriggers.register();
                 Wares.Stats.register();
-                DispenserBlock.registerBehavior(Wares.Items.PACKAGE.get(), new PackageDispenseBehavior());
+                DispenserBlock.registerBehavior(WaresItems.PACKAGE.get(), new PackageDispenseBehavior());
             });
         }
     }
@@ -40,7 +41,7 @@ public class CommonEvents {
             if (!Config.WANDERING_TRADER_AGREEMENTS.get())
                 return;
 
-            ItemStack regularSealedAgreement = new ItemStack(Wares.Items.SEALED_DELIVERY_AGREEMENT.get());
+            ItemStack regularSealedAgreement = new ItemStack(WaresItems.SEALED_DELIVERY_AGREEMENT.get());
             new SealedDeliveryAgreement.Builder()
                     .requested(Wares.resource("agreement/wandering_trader/regular_price"))
                     .payment(Wares.resource("agreement/wandering_trader/regular_ware"))
@@ -52,7 +53,7 @@ public class CommonEvents {
 
             event.getGenericTrades().add(new BasicItemListing(6, regularSealedAgreement, 1, 6));
 
-            ItemStack rareSealedAgreement = new ItemStack(Wares.Items.SEALED_DELIVERY_AGREEMENT.get());
+            ItemStack rareSealedAgreement = new ItemStack(WaresItems.SEALED_DELIVERY_AGREEMENT.get());
             new SealedDeliveryAgreement.Builder()
                     .requested(Wares.resource("agreement/wandering_trader/rare_price"))
                     .payment(Wares.resource("agreement/wandering_trader/rare_ware"))

@@ -1,6 +1,6 @@
 package com.flarelabsmc.wares.mixin;
 
-import com.flarelabsmc.wares.Wares;
+import com.flarelabsmc.wares.registry.WaresItems;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.ai.behavior.ShowTradesToPlayer;
 import net.minecraft.world.entity.npc.Villager;
@@ -18,7 +18,7 @@ public abstract class ShowTradesToPlayerMixin {
      */
     @Inject(method = "clearHeldItem", cancellable = true, at = @At("HEAD"))
     private static void clearHeldItem(Villager villager, CallbackInfo ci) {
-        if (villager.getItemInHand(InteractionHand.MAIN_HAND).is(Wares.Items.CARDBOARD_BOX.get()))
+        if (villager.getItemInHand(InteractionHand.MAIN_HAND).is(WaresItems.CARDBOARD_BOX.get()))
             ci.cancel();
     }
 }

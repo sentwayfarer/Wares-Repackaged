@@ -2,12 +2,12 @@ package com.flarelabsmc.wares.content.command;
 
 import com.flarelabsmc.wares.data.agreement.DeliveryAgreement;
 import com.flarelabsmc.wares.data.agreement.SealedDeliveryAgreement;
+import com.flarelabsmc.wares.registry.WaresItems;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.datafixers.util.Either;
 import com.flarelabsmc.mpfui.helper.LoremIpsum;
-import com.flarelabsmc.wares.Wares;
 import io.github.mortuusars.wares.data.agreement.*;
 import com.flarelabsmc.wares.data.agreement.component.RequestedItem;
 import com.flarelabsmc.wares.data.agreement.component.SteppedInt;
@@ -99,7 +99,7 @@ public class WaresCommand {
                 Either.left(100),
                 Either.left(5 * 60));
 
-        ItemStack sealedAgreementStack = new ItemStack(Wares.Items.SEALED_DELIVERY_AGREEMENT.get());
+        ItemStack sealedAgreementStack = new ItemStack(WaresItems.SEALED_DELIVERY_AGREEMENT.get());
         sealedAgreement.toItemStack(sealedAgreementStack);
 
         if (serverPlayer.getMainHandItem().isEmpty())
@@ -128,7 +128,7 @@ public class WaresCommand {
                 .expireTime(serverPlayer.level().getGameTime() + 20 * 60 * 15)
                 .build();
 
-        ItemStack agreementStack = new ItemStack(Wares.Items.DELIVERY_AGREEMENT.get());
+        ItemStack agreementStack = new ItemStack(WaresItems.DELIVERY_AGREEMENT.get());
         agreement.toItemStack(agreementStack);
 
         if (serverPlayer.getMainHandItem().isEmpty())
@@ -143,16 +143,16 @@ public class WaresCommand {
         ServerPlayer player = context.getSource().getPlayerOrException();
         ItemStack mainHandItem = player.getMainHandItem();
 
-        if (mainHandItem.is(Wares.Items.COMPLETED_DELIVERY_AGREEMENT.get())) {
+        if (mainHandItem.is(WaresItems.COMPLETED_DELIVERY_AGREEMENT.get())) {
             context.getSource().sendFailure(Component.translatable("commands.wares.agreement.complete.already_completed"));
             return 1;
         }
-        else if (mainHandItem.is(Wares.Items.EXPIRED_DELIVERY_AGREEMENT.get())) {
+        else if (mainHandItem.is(WaresItems.EXPIRED_DELIVERY_AGREEMENT.get())) {
             context.getSource().sendFailure(Component.translatable("commands.wares.agreement.complete.is_expired"));
             return 1;
         }
-        else if (!mainHandItem.is(Wares.Items.DELIVERY_AGREEMENT.get())) {
-            context.getSource().sendFailure(Component.translatable("commands.wares.agreement.complete.wrong_item", Wares.Items.DELIVERY_AGREEMENT.get(), mainHandItem.getItem()));
+        else if (!mainHandItem.is(WaresItems.DELIVERY_AGREEMENT.get())) {
+            context.getSource().sendFailure(Component.translatable("commands.wares.agreement.complete.wrong_item", WaresItems.DELIVERY_AGREEMENT.get(), mainHandItem.getItem()));
             return 1;
         }
 
@@ -162,7 +162,7 @@ public class WaresCommand {
             return 1;
         }
 
-        ItemStack completedStack = new ItemStack(Wares.Items.COMPLETED_DELIVERY_AGREEMENT.get());
+        ItemStack completedStack = new ItemStack(WaresItems.COMPLETED_DELIVERY_AGREEMENT.get());
         agreement.complete();
         agreement.toItemStack(completedStack);
         player.setItemInHand(InteractionHand.MAIN_HAND, completedStack);

@@ -1,8 +1,8 @@
 package com.flarelabsmc.wares.menu;
 
-import com.flarelabsmc.wares.Wares;
 import com.flarelabsmc.wares.content.block.entity.DeliveryTableBlockEntity;
 import com.flarelabsmc.wares.config.Config;
+import com.flarelabsmc.wares.registry.WaresMenuTypes;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -25,7 +25,7 @@ public class DeliveryTableMenu extends AbstractContainerMenu {
     private final ContainerData data;
 
     public DeliveryTableMenu(int containerId, final Inventory playerInventory, final DeliveryTableBlockEntity blockEntity, ContainerData containerData) {
-        super(Wares.MenuTypes.DELIVERY_TABLE.get(), containerId);
+        super(WaresMenuTypes.DELIVERY_TABLE.get(), containerId);
         this.blockEntity = blockEntity;
         this.data = containerData;
 

@@ -1,5 +1,7 @@
 package com.flarelabsmc.wares.data.generation.provider;
 
+import com.flarelabsmc.wares.registry.WaresBlocks;
+import com.flarelabsmc.wares.registry.WaresItems;
 import com.google.common.base.Preconditions;
 import com.mojang.datafixers.util.Pair;
 import com.flarelabsmc.wares.Wares;
@@ -49,15 +51,15 @@ public class LootTables {
 
         @Override
         protected void generate() {
-            dropSelf(Wares.Blocks.DELIVERY_TABLE.get());
-            add(Wares.Blocks.PACKAGE.get(), noDrop());
+            dropSelf(WaresBlocks.DELIVERY_TABLE.get());
+            add(WaresBlocks.PACKAGE.get(), noDrop());
 
-            CardboardBoxBlock cardboardBox = Wares.Blocks.CARDBOARD_BOX.get();
+            CardboardBoxBlock cardboardBox = WaresBlocks.CARDBOARD_BOX.get();
             add(cardboardBox, LootTable.lootTable()
                     .setParamSet(LootContextParamSets.BLOCK)
                     .withPool(LootPool.lootPool()
                             .setRolls(ConstantValue.exactly(1.0F))
-                            .add(LootItem.lootTableItem(Wares.Items.CARDBOARD_BOX.get())
+                            .add(LootItem.lootTableItem(WaresItems.CARDBOARD_BOX.get())
                                     .apply(SetItemCountFunction.setCount(ConstantValue.exactly(2.0F))
                                             .when(LootItemBlockStatePropertyCondition.hasBlockStateProperties(cardboardBox)
                                                     .setProperties(StatePropertiesPredicate.Builder.properties()
@@ -405,7 +407,7 @@ public class LootTables {
                     .experience(new SteppedInt(12, 32, 4))
                     .build();
 
-            ItemStack sealedStackSell = new ItemStack(Wares.Items.SEALED_DELIVERY_AGREEMENT.get());
+            ItemStack sealedStackSell = new ItemStack(WaresItems.SEALED_DELIVERY_AGREEMENT.get());
             agreementSell.toItemStack(sealedStackSell);
 
             SealedDeliveryAgreement agreementBuy = new SealedDeliveryAgreement.Builder()
@@ -415,7 +417,7 @@ public class LootTables {
                     .experience(new SteppedInt(12, 32, 4))
                     .build();
 
-            ItemStack sealedStackBuy = new ItemStack(Wares.Items.SEALED_DELIVERY_AGREEMENT.get());
+            ItemStack sealedStackBuy = new ItemStack(WaresItems.SEALED_DELIVERY_AGREEMENT.get());
             agreementBuy.toItemStack(sealedStackBuy);
 
             return LootTable.lootTable()
@@ -425,13 +427,13 @@ public class LootTables {
                             .add(item(Items.PAPER, 1, 3).setWeight(10)))
                     .withPool(LootPool.lootPool()
                             .setRolls(UniformGenerator.between(1, 6))
-                            .add(item(Wares.Items.CARDBOARD_BOX.get(), 1, 1).setWeight(8)))
+                            .add(item(WaresItems.CARDBOARD_BOX.get(), 1, 1).setWeight(8)))
                     .withPool(LootPool.lootPool()
                             .setRolls(ConstantValue.exactly(1))
-                            .add(LootItem.lootTableItem(Wares.Items.SEALED_DELIVERY_AGREEMENT.get())
+                            .add(LootItem.lootTableItem(WaresItems.SEALED_DELIVERY_AGREEMENT.get())
                                     .apply(SetNbtFunction.setTag(sealedStackSell.getOrCreateTag()))
                                     .apply(SetItemCountFunction.setCount(ConstantValue.exactly(1))).setWeight(6))
-                            .add(LootItem.lootTableItem(Wares.Items.SEALED_DELIVERY_AGREEMENT.get())
+                            .add(LootItem.lootTableItem(WaresItems.SEALED_DELIVERY_AGREEMENT.get())
                                     .apply(SetNbtFunction.setTag(sealedStackBuy.getOrCreateTag()))
                                     .apply(SetItemCountFunction.setCount(ConstantValue.exactly(1))).setWeight(3))
                             .add(EmptyLootItem.emptyItem()));

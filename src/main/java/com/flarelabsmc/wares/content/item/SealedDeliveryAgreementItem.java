@@ -5,6 +5,7 @@ import com.flarelabsmc.wares.client.gui.agreement.SealedAgreementScreen;
 import com.flarelabsmc.wares.config.Config;
 import com.flarelabsmc.wares.data.agreement.DeliveryAgreement;
 import com.flarelabsmc.wares.data.agreement.SealedDeliveryAgreement;
+import com.flarelabsmc.wares.registry.WaresItems;
 import com.flarelabsmc.wares.util.ClientHelper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
@@ -134,7 +135,7 @@ public class SealedDeliveryAgreementItem extends Item {
             try {
                 DeliveryAgreement agreement = descriptionOptional.get().realize(serverLevel);
 
-                ItemStack agreementStack = new ItemStack(Wares.Items.DELIVERY_AGREEMENT.get());
+                ItemStack agreementStack = new ItemStack(WaresItems.DELIVERY_AGREEMENT.get());
 
                 if (Config.KEEP_SEALED_STACK_NBT_WHEN_OPENED.get()) {
                     CompoundTag oldTag = stack.getTag().copy();

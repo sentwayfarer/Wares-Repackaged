@@ -2,6 +2,7 @@ package com.flarelabsmc.wares.content.block.entity;
 
 import com.flarelabsmc.wares.Wares;
 import com.flarelabsmc.wares.data.Package;
+import com.flarelabsmc.wares.registry.WaresBlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
@@ -17,7 +18,7 @@ public class PackageBlockEntity extends BlockEntity {
     private boolean unpacksWhenBroken = true;
 
     public PackageBlockEntity(BlockPos pos, BlockState blockState) {
-        super(Wares.BlockEntities.PACKAGE.get(), pos, blockState);
+        super(WaresBlockEntities.PACKAGE.get(), pos, blockState);
     }
 
     public Package getPackage() {

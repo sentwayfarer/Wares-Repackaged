@@ -2,6 +2,8 @@ package com.flarelabsmc.wares.content.item;
 
 import com.flarelabsmc.wares.Wares;
 import com.flarelabsmc.wares.menu.CardboardBoxMenu;
+import com.flarelabsmc.wares.registry.WaresBlocks;
+import com.flarelabsmc.wares.registry.WaresItems;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
@@ -29,8 +31,8 @@ public class CardboardBoxItem extends BlockItem {
         Level level = context.getLevel();
 
         if (!context.isSecondaryUseActive()
-                && !level.getBlockState(context.getClickedPos()).is(Wares.Blocks.CARDBOARD_BOX.get())
-                && usedStack.is(Wares.Items.CARDBOARD_BOX.get())) {
+                && !level.getBlockState(context.getClickedPos()).is(WaresBlocks.CARDBOARD_BOX.get())
+                && usedStack.is(WaresItems.CARDBOARD_BOX.get())) {
             if (context.getPlayer() instanceof ServerPlayer serverPlayer)
                 openCardboardBoxGui(serverPlayer, usedStack);
 
@@ -43,7 +45,7 @@ public class CardboardBoxItem extends BlockItem {
     @Override
     public @NotNull InteractionResultHolder<ItemStack> use(@NotNull Level level, Player player, @NotNull InteractionHand usedHand) {
         ItemStack stack = player.getItemInHand(usedHand);
-        if (stack.is(Wares.Items.CARDBOARD_BOX.get()) && player instanceof ServerPlayer serverPlayer)
+        if (stack.is(WaresItems.CARDBOARD_BOX.get()) && player instanceof ServerPlayer serverPlayer)
             openCardboardBoxGui(serverPlayer, stack);
 
         return InteractionResultHolder.success(stack);

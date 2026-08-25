@@ -5,6 +5,7 @@ import com.flarelabsmc.wares.content.block.entity.DeliveryTableBlockEntity;
 import com.flarelabsmc.wares.content.block.entity.PackageBlockEntity;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
@@ -21,5 +22,7 @@ public class WaresBlockEntities {
             BLOCK_ENTITIES.register("package",
                     () -> BlockEntityType.Builder.of(PackageBlockEntity::new, WaresBlocks.PACKAGE.get()).build(null));
 
-    public void register
+    public static void register(IEventBus eventBus) {
+        BLOCK_ENTITIES.register(eventBus);
+    }
 }

@@ -1,6 +1,7 @@
 package com.flarelabsmc.wares.data.generation.provider;
 
 import com.flarelabsmc.wares.Wares;
+import com.flarelabsmc.wares.registry.WaresBlocks;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.DataGenerator;
 import net.neoforged.neoforge.common.data.BlockTagsProvider;
@@ -18,6 +19,6 @@ public class BlockTags extends BlockTagsProvider {
     @Override
     protected void addTags(HolderLookup.@NotNull Provider provider) {
         tag(net.minecraft.tags.BlockTags.MINEABLE_WITH_AXE)
-                .add(Wares.Blocks.DELIVERY_TABLE.get());
+                .add(WaresBlocks.DELIVERY_TABLE.get());
     }
 }

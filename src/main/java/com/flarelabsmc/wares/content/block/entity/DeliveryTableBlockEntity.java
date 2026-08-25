@@ -10,6 +10,8 @@ import com.flarelabsmc.wares.data.agreement.component.RequestedItem;
 import com.flarelabsmc.wares.integration.kubejs.KubeJSIntegration;
 import com.flarelabsmc.wares.content.item.DeliveryAgreementItem;
 import com.flarelabsmc.wares.menu.DeliveryTableMenu;
+import com.flarelabsmc.wares.registry.WaresBlockEntities;
+import com.flarelabsmc.wares.registry.WaresItems;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.Util;
 import net.minecraft.core.*;
@@ -109,7 +111,7 @@ public class DeliveryTableBlockEntity extends BaseContainerBlockEntity implement
     protected UUID ownerUUID = Util.NIL_UUID;
 
     public DeliveryTableBlockEntity(BlockPos pos, BlockState blockState) {
-        super(Wares.BlockEntities.DELIVERY_TABLE.get(), pos, blockState);
+        super(WaresBlockEntities.DELIVERY_TABLE.get(), pos, blockState);
         inventory = createInventory();
         inventoryHandlers = new SidedInvWrapper[]{
                 new SidedInvWrapper(this, Direction.DOWN),
@@ -125,13 +127,13 @@ public class DeliveryTableBlockEntity extends BaseContainerBlockEntity implement
         convertAgreementStackIfNeeded();
 
         ItemStack agreementItem = getAgreementItem();
-        if (!agreementItem.is(Wares.Items.DELIVERY_AGREEMENT.get())) {
+        if (!agreementItem.is(WaresItems.DELIVERY_AGREEMENT.get())) {
             if (progress > 0) {
                 resetProgress();
                 setChanged();
             }
 
-            if (Config.MOVE_COMPLETED_AGREEMENT_TO_OUTPUT.get() && agreementItem.is(Wares.Items.COMPLETED_DELIVERY_AGREEMENT.get())) {
+            if (Config.MOVE_COMPLETED_AGREEMENT_TO_OUTPUT.get() && agreementItem.is(WaresItems.COMPLETED_DELIVERY_AGREEMENT.get())) {
                 ItemStack agreementStack = getAgreementItem();
                 for (int outputSlot : OUTPUT_SLOTS) {
                     if (getItem(outputSlot).isEmpty()) {
@@ -621,7 +623,7 @@ public class DeliveryTableBlockEntity extends BaseContainerBlockEntity implement
         if (level == null || level.isClientSide)
             return;
 
-        if (!getAgreementItem().is(Wares.Items.DELIVERY_AGREEMENT.get()))
+        if (!getAgreementItem().is(WaresItems.DELIVERY_AGREEMENT.get()))
             return;
 
         if (getAgreement().isCompleted()) {

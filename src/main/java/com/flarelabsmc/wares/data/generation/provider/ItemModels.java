@@ -1,6 +1,7 @@
 package com.flarelabsmc.wares.data.generation.provider;
 
 import com.flarelabsmc.wares.Wares;
+import com.flarelabsmc.wares.registry.WaresItems;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.world.item.BlockItem;
@@ -17,13 +18,13 @@ public class ItemModels extends ItemModelProvider {
 
     @Override
     protected void registerModels() {
-        blockItem(Wares.Items.DELIVERY_TABLE.get());
-        singleTextureItem(Wares.Items.CARDBOARD_BOX.get());
-        singleTextureItem(Wares.Items.PACKAGE.get());
-        singleTextureItem(Wares.Items.SEALED_DELIVERY_AGREEMENT.get());
-        singleTextureItem(Wares.Items.DELIVERY_AGREEMENT.get());
-        singleTextureItem(Wares.Items.COMPLETED_DELIVERY_AGREEMENT.get());
-        singleTextureItem(Wares.Items.EXPIRED_DELIVERY_AGREEMENT.get());
+        blockItem(WaresItems.DELIVERY_TABLE.get());
+        singleTextureItem(WaresItems.CARDBOARD_BOX.get());
+        singleTextureItem(WaresItems.PACKAGE.get());
+        singleTextureItem(WaresItems.SEALED_DELIVERY_AGREEMENT.get());
+        singleTextureItem(WaresItems.DELIVERY_AGREEMENT.get());
+        singleTextureItem(WaresItems.COMPLETED_DELIVERY_AGREEMENT.get());
+        singleTextureItem(WaresItems.EXPIRED_DELIVERY_AGREEMENT.get());
     }
 
     private ItemModelBuilder blockItem(BlockItem item) {

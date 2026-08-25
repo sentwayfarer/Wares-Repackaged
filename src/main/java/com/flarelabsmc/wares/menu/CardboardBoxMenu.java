@@ -1,5 +1,7 @@
 package com.flarelabsmc.wares.menu;
 
+import com.flarelabsmc.wares.registry.WaresItems;
+import com.flarelabsmc.wares.registry.WaresMenuTypes;
 import com.mojang.datafixers.util.Either;
 import com.mojang.datafixers.util.Pair;
 import com.flarelabsmc.wares.Wares;
@@ -33,7 +35,7 @@ public class CardboardBoxMenu extends AbstractContainerMenu {
     private boolean itemsPacked = false;
 
     public CardboardBoxMenu(int containerId, final Inventory playerInventory) {
-        super(Wares.MenuTypes.CARDBOARD_BOX.get(), containerId);
+        super(WaresMenuTypes.CARDBOARD_BOX.get(), containerId);
 
         cardboardBoxItemHandler = new ItemStackHandler(SLOTS) {
             @Override
@@ -101,11 +103,11 @@ public class CardboardBoxMenu extends AbstractContainerMenu {
 
             ItemStack boxStack = ItemStack.EMPTY;
 
-            if (player.getInventory().getSelected().is(Wares.Items.CARDBOARD_BOX.get()))
+            if (player.getInventory().getSelected().is(WaresItems.CARDBOARD_BOX.get()))
                 boxStack = player.getInventory().getSelected();
             else {
                 for (ItemStack item : player.getInventory().items) {
-                    if (item.is(Wares.Items.CARDBOARD_BOX.get())) {
+                    if (item.is(WaresItems.CARDBOARD_BOX.get())) {
                         boxStack = item;
                         break;
                     }
@@ -125,7 +127,7 @@ public class CardboardBoxMenu extends AbstractContainerMenu {
                     packedItems.add(stackInSlot);
             }
 
-            ItemStack packageStack = new ItemStack(Wares.Items.PACKAGE.get());
+            ItemStack packageStack = new ItemStack(WaresItems.PACKAGE.get());
             new Package(Either.right(packedItems), player.getScoreboardName()).toItemStack(packageStack);
 
             boxStack.shrink(1);
@@ -160,6 +162,6 @@ public class CardboardBoxMenu extends AbstractContainerMenu {
 
     @Override
     public boolean stillValid(Player player) {
-        return player.getInventory().getItem(openedBoxSlotId).is(Wares.Items.CARDBOARD_BOX.get());
+        return player.getInventory().getItem(openedBoxSlotId).is(WaresItems.CARDBOARD_BOX.get());
     }
 }

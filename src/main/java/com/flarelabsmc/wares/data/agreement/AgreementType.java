@@ -1,6 +1,6 @@
 package com.flarelabsmc.wares.data.agreement;
 
-import com.flarelabsmc.wares.Wares;
+import com.flarelabsmc.wares.registry.WaresItems;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -19,13 +19,13 @@ public enum AgreementType implements StringRepresentable {
     }
 
     public static AgreementType fromItemStack(ItemStack stack) {
-        if (stack.is(Wares.Items.SEALED_DELIVERY_AGREEMENT.get()))
+        if (stack.is(WaresItems.SEALED_DELIVERY_AGREEMENT.get()))
             return SEALED;
-        else if (stack.is(Wares.Items.DELIVERY_AGREEMENT.get()))
+        else if (stack.is(WaresItems.DELIVERY_AGREEMENT.get()))
             return REGULAR;
-        else if (stack.is(Wares.Items.COMPLETED_DELIVERY_AGREEMENT.get()))
+        else if (stack.is(WaresItems.COMPLETED_DELIVERY_AGREEMENT.get()))
             return COMPLETED;
-        else if (stack.is(Wares.Items.EXPIRED_DELIVERY_AGREEMENT.get()))
+        else if (stack.is(WaresItems.EXPIRED_DELIVERY_AGREEMENT.get()))
             return EXPIRED;
         else
             return NONE;

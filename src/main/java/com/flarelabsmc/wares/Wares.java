@@ -1,21 +1,14 @@
 package com.flarelabsmc.wares;
 
+import com.flarelabsmc.wares.registry.WaresBlockEntities;
+import com.flarelabsmc.wares.registry.WaresBlocks;
+import com.flarelabsmc.wares.registry.WaresItems;
+import com.flarelabsmc.wares.registry.WaresMenuTypes;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableSet;
 import com.mojang.logging.LogUtils;
 import com.flarelabsmc.wares.content.advancement.DeliveryTableTrigger;
-import com.flarelabsmc.wares.content.block.CardboardBoxBlock;
-import com.flarelabsmc.wares.content.block.DeliveryTableBlock;
-import com.flarelabsmc.wares.content.block.PackageBlock;
-import com.flarelabsmc.wares.content.block.entity.DeliveryTableBlockEntity;
-import com.flarelabsmc.wares.content.block.entity.PackageBlockEntity;
 import com.flarelabsmc.wares.config.Config;
-import com.flarelabsmc.wares.content.item.DeliveryAgreementItem;
-import com.flarelabsmc.wares.content.item.CardboardBoxItem;
-import com.flarelabsmc.wares.content.item.PackageItem;
-import com.flarelabsmc.wares.content.item.SealedDeliveryAgreementItem;
-import com.flarelabsmc.wares.menu.CardboardBoxMenu;
-import com.flarelabsmc.wares.menu.DeliveryTableMenu;
 import com.flarelabsmc.wares.world.VillageStructures;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.Registry;
@@ -27,20 +20,13 @@ import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.ai.village.poi.PoiType;
 import net.minecraft.world.entity.npc.VillagerProfession;
-import net.minecraft.world.inventory.MenuType;
-import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
-import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.minecraft.world.level.material.MapColor;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.neoforge.common.extensions.IMenuTypeExtension;
 import net.neoforged.neoforge.common.util.DeferredSoundType;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -63,10 +49,10 @@ public class Wares
         bus.addListener(Config::onConfigLoad);
         bus.addListener(Config::onConfigReload);
 
-        Blocks.BLOCKS.register(bus);
-        BlockEntities.BLOCK_ENTITIES.register(bus);
-        MenuTypes.MENU_TYPES.register(bus);
-        Items.ITEMS.register(bus);
+        WaresBlocks.register(bus);
+        WaresBlockEntities.register(bus);
+        WaresMenuTypes.register(bus);
+        WaresItems.register(bus);
         Villagers.POI_TYPES.register(bus);
         Villagers.PROFESSIONS.register(bus);
         SoundEvents.SOUNDS.register(bus);
@@ -82,85 +68,13 @@ public class Wares
     }
 
 
-    public static class Blocks {
-        private static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(BuiltInRegistries.BLOCK, ID);
-
-        public static final DeferredHolder<Block, DeliveryTableBlock> DELIVERY_TABLE = BLOCKS.register("delivery_table",
-                () -> new DeliveryTableBlock(BlockBehaviour.Properties.of()
-                        .sound(SoundType.WOOD)
-                        .mapColor(MapColor.COLOR_BROWN)
-                        .strength(2f)));
-
-        public static final DeferredHolder<Block, CardboardBoxBlock> CARDBOARD_BOX = BLOCKS.register("cardboard_box",
-                () -> new CardboardBoxBlock(BlockBehaviour.Properties.of()
-                        .sound(SoundTypes.CARDBOARD)
-                        .mapColor(MapColor.COLOR_BROWN)
-                        .strength(0.4f)));
-
-        public static final DeferredHolder<Block, PackageBlock> PACKAGE = BLOCKS.register("package",
-                () -> new PackageBlock(BlockBehaviour.Properties.of()
-                        .sound(SoundTypes.CARDBOARD)
-                        .mapColor(MapColor.COLOR_BROWN)
-                        .strength(0.6f)));
-    }
-
-    @SuppressWarnings("DataFlowIssue")
-    public static class BlockEntities {
-        private static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(BuiltInRegistries.BLOCK_ENTITY_TYPE, ID);
-
-        @SuppressWarnings("DataFlowIssue")
-        public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<DeliveryTableBlockEntity>> DELIVERY_TABLE =
-                BLOCK_ENTITIES.register("delivery_table",
-                        () -> BlockEntityType.Builder.of(DeliveryTableBlockEntity::new, Blocks.DELIVERY_TABLE.get()).build(null));
-
-        public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<PackageBlockEntity>> PACKAGE =
-                BLOCK_ENTITIES.register("package",
-                        () -> BlockEntityType.Builder.of(PackageBlockEntity::new, Blocks.PACKAGE.get()).build(null));
-    }
-
-    public static class MenuTypes {
-        private static final DeferredRegister<MenuType<?>> MENU_TYPES = DeferredRegister.create(BuiltInRegistries.MENU, Wares.ID);
-
-        public static final DeferredHolder<MenuType<?>, MenuType<DeliveryTableMenu>> DELIVERY_TABLE = MENU_TYPES
-                .register("delivery_table", () -> IMenuTypeExtension.create(DeliveryTableMenu::fromBuffer));
-
-        public static final DeferredHolder<MenuType<?>, MenuType<CardboardBoxMenu>> CARDBOARD_BOX = MENU_TYPES
-                .register("cardboard_box", () -> IMenuTypeExtension.create(CardboardBoxMenu::fromBuffer));
-    }
-
-    public static class Items {
-        private static final DeferredRegister<Item> ITEMS = DeferredRegister.create(BuiltInRegistries.ITEM, ID);
-
-        public static final DeferredHolder<Item, SealedDeliveryAgreementItem> SEALED_DELIVERY_AGREEMENT = ITEMS.register("sealed_delivery_agreement", () ->
-                new SealedDeliveryAgreementItem(new Item.Properties()
-                        .stacksTo(1)));
-        public static final DeferredHolder<Item, DeliveryAgreementItem> DELIVERY_AGREEMENT = ITEMS.register("delivery_agreement", () ->
-                new DeliveryAgreementItem(new Item.Properties()
-                        .stacksTo(1)));
-        public static final DeferredHolder<Item, DeliveryAgreementItem> COMPLETED_DELIVERY_AGREEMENT = ITEMS.register("completed_delivery_agreement", () ->
-                new DeliveryAgreementItem(new Item.Properties()
-                        .stacksTo(1)));
-        public static final DeferredHolder<Item, DeliveryAgreementItem> EXPIRED_DELIVERY_AGREEMENT = ITEMS.register("expired_delivery_agreement", () ->
-                new DeliveryAgreementItem(new Item.Properties()
-                        .stacksTo(1)));
-
-        public static final DeferredHolder<Item, BlockItem> DELIVERY_TABLE = ITEMS.register("delivery_table", () ->
-                new BlockItem(Blocks.DELIVERY_TABLE.get(), new Item.Properties()));
-
-        public static final DeferredHolder<Item, CardboardBoxItem> CARDBOARD_BOX = ITEMS.register("cardboard_box", () ->
-                new CardboardBoxItem(Blocks.CARDBOARD_BOX.get(), new Item.Properties()));
-        public static final DeferredHolder<Item, PackageItem> PACKAGE = ITEMS.register("package", () ->
-                new PackageItem(Blocks.PACKAGE.get(), new Item.Properties()
-                        .stacksTo(1)));
-    }
-
     public static class Villagers {
         public static final DeferredRegister<PoiType> POI_TYPES = DeferredRegister.create(BuiltInRegistries.POINT_OF_INTEREST_TYPE, Wares.ID);
         public static final DeferredRegister<VillagerProfession> PROFESSIONS = DeferredRegister.create(BuiltInRegistries.VILLAGER_PROFESSION, Wares.ID);
 
 
-        public static final DeferredHolder<PoiType, PoiType> DELIVERY_TABLE_POI = POI_TYPES.register(Blocks.DELIVERY_TABLE.getId().getPath(),
-                () -> new PoiType(ImmutableSet.copyOf(Blocks.DELIVERY_TABLE.get().getStateDefinition().getPossibleStates()), 1, 1));
+        public static final DeferredHolder<PoiType, PoiType> DELIVERY_TABLE_POI = POI_TYPES.register(WaresBlocks.DELIVERY_TABLE.getId().getPath(),
+                () -> new PoiType(ImmutableSet.copyOf(WaresBlocks.DELIVERY_TABLE.get().getStateDefinition().getPossibleStates()), 1, 1));
 
         public static final DeferredHolder<VillagerProfession, VillagerProfession> PACKAGER = PROFESSIONS.register("packager",
                 () -> new VillagerProfession("packager", poi -> poi.is(Objects.requireNonNull(DELIVERY_TABLE_POI.getKey())), poi -> poi.is(Objects.requireNonNull(DELIVERY_TABLE_POI.getKey())),

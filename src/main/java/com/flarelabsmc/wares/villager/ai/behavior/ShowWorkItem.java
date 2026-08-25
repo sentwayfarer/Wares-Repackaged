@@ -1,5 +1,6 @@
 package com.flarelabsmc.wares.villager.ai.behavior;
 
+import com.flarelabsmc.wares.registry.WaresItems;
 import com.google.common.collect.ImmutableMap;
 import com.flarelabsmc.wares.Wares;
 import com.flarelabsmc.wares.content.block.entity.DeliveryTableBlockEntity;
@@ -42,7 +43,7 @@ public class ShowWorkItem extends Behavior<Villager> {
             BlockPos jobSitePos = jobSiteMemory.get().pos();
             if (level.isLoaded(jobSitePos)
                     && level.getBlockEntity(jobSitePos) instanceof DeliveryTableBlockEntity deliveryTableBlockEntity
-                    && !deliveryTableBlockEntity.getAgreementItem().is(Wares.Items.DELIVERY_AGREEMENT.get()))
+                    && !deliveryTableBlockEntity.getAgreementItem().is(WaresItems.DELIVERY_AGREEMENT.get()))
                 return false;
         }
 
