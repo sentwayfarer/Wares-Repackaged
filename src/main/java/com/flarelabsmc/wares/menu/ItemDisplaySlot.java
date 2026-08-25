@@ -17,7 +17,7 @@ public class ItemDisplaySlot extends Slot {
 
     public ItemDisplaySlot(List<ItemStack> stacks, Component additionalTooltip, int slot, int x, int y) {
         super(new SimpleContainer(slot), slot, x, y);
-        Preconditions.checkState(stacks.size() > 0, "No items to display.");
+        Preconditions.checkState(!stacks.isEmpty(), "No items to display.");
         this.stacks = stacks;
         this.additionalTooltip = additionalTooltip;
     }
@@ -32,7 +32,7 @@ public class ItemDisplaySlot extends Slot {
     }
 
     public void cycleItem(boolean backwards) {
-        if (stacks.size() == 0) {
+        if (stacks.isEmpty()) {
             index = 0;
             return;
         }
