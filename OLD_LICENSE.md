@@ -1,6 +1,6 @@
-This license applies to all files, commits and changes not present in https://github.com/mortuusars/Wares
+This license applies to all files and commits available at https://github.com/mortuusars/Wares
 
-Copyright (c) 2026 FlarelabsMC, sentWayfarer & Auseawesome
+Copyright (c) 2026 mortuusars
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
