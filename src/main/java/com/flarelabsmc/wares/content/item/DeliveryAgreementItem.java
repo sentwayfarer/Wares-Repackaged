@@ -1,6 +1,7 @@
 package com.flarelabsmc.wares.content.item;
 
 import com.flarelabsmc.wares.registry.WaresItems;
+import com.flarelabsmc.wares.registry.WaresSoundEvents;
 import com.mojang.datafixers.util.Either;
 import com.flarelabsmc.wares.Wares;
 import com.flarelabsmc.wares.client.gui.agreement.AgreementGUI;
@@ -181,7 +182,7 @@ public class DeliveryAgreementItem extends Item {
 
                                 player.displayClientMessage(Component.translatable(userErrorKey).withStyle(ChatFormatting.RED), true);
                                 Wares.LOGGER.warn(loggerError);
-                                player.playSound(Wares.SoundEvents.PAPER_CRACKLE.get(), 0.8f, 0.65f);
+                                player.playSound(WaresSoundEvents.PAPER_CRACKLE.get(), 0.8f, 0.65f);
                             });
 
         }

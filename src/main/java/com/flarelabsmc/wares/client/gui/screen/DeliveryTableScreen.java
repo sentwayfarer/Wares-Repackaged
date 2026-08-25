@@ -1,5 +1,6 @@
 package com.flarelabsmc.wares.client.gui.screen;
 
+import com.flarelabsmc.wares.registry.WaresSoundEvents;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.flarelabsmc.wares.Wares;
 import com.flarelabsmc.wares.content.block.entity.DeliveryTableBlockEntity;
@@ -39,7 +40,7 @@ public class DeliveryTableScreen extends AbstractContainerScreen<DeliveryTableMe
             manualDeliveryButtonTooltip.append("\n").append(Component.translatable("gui.wares.delivery_table.manual_delivery.tooltip_extra_info", formattedModifier).withStyle(ChatFormatting.GRAY));
         }
 
-        playerInventory.player.playSound(Wares.SoundEvents.DELIVERY_TABLE_OPEN.get(), 0.8f,
+        playerInventory.player.playSound(WaresSoundEvents.DELIVERY_TABLE_OPEN.get(), 0.8f,
                 playerInventory.player.level().getRandom().nextFloat() * 0.2f + 0.9f);
     }
 
@@ -122,7 +123,7 @@ public class DeliveryTableScreen extends AbstractContainerScreen<DeliveryTableMe
     public void onClose() {
         super.onClose();
         if (Minecraft.getInstance().player != null) {
-            Minecraft.getInstance().player.playSound(Wares.SoundEvents.DELIVERY_TABLE_CLOSE.get(), 0.8f,
+            Minecraft.getInstance().player.playSound(WaresSoundEvents.DELIVERY_TABLE_CLOSE.get(), 0.8f,
                 Minecraft.getInstance().player.level().getRandom().nextFloat() * 0.2f + 0.9f);
         }
     }

@@ -6,6 +6,7 @@ import com.flarelabsmc.wares.config.Config;
 import com.flarelabsmc.wares.data.agreement.DeliveryAgreement;
 import com.flarelabsmc.wares.data.agreement.SealedDeliveryAgreement;
 import com.flarelabsmc.wares.registry.WaresItems;
+import com.flarelabsmc.wares.registry.WaresSoundEvents;
 import com.flarelabsmc.wares.registry.WaresStats;
 import com.flarelabsmc.wares.util.ClientHelper;
 import net.minecraft.ChatFormatting;
@@ -81,7 +82,7 @@ public class SealedDeliveryAgreementItem extends Item {
                 player.displayClientMessage(Component.translatable("item.wares.sealed_delivery_agreement.damaged.message")
                         .withStyle(ChatFormatting.RED), true);
             Wares.LOGGER.error(stack + " does not have agreement data or data is not correct. Make sure item stack has agreement nbt and it is correct.");
-            player.playSound(Wares.SoundEvents.PAPER_CRACKLE.get(), 0.8f, 0.65f);
+            player.playSound(WaresSoundEvents.PAPER_CRACKLE.get(), 0.8f, 0.65f);
         }
         else
             player.startUsingItem(hand);
@@ -102,7 +103,7 @@ public class SealedDeliveryAgreementItem extends Item {
 
     @Override
     public @NotNull SoundEvent getEatingSound() {
-        return Wares.SoundEvents.PAPER_CRACKLE.get();
+        return WaresSoundEvents.PAPER_CRACKLE.get();
     }
 
     @Override
@@ -148,7 +149,7 @@ public class SealedDeliveryAgreementItem extends Item {
                     level.playSound(null,
                             player.position().x,
                             player.position().y,
-                            player.position().z, Wares.SoundEvents.PAPER_TEAR.get(), SoundSource.PLAYERS,
+                            player.position().z, WaresSoundEvents.PAPER_TEAR.get(), SoundSource.PLAYERS,
                             1f, level.getRandom().nextFloat() * 0.1f + 0.95f);
 
                     return agreementStack;

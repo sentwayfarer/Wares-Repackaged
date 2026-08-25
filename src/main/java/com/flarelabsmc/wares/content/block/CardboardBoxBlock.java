@@ -1,6 +1,6 @@
 package com.flarelabsmc.wares.content.block;
 
-import com.flarelabsmc.wares.Wares;
+import com.flarelabsmc.wares.registry.WaresSoundEvents;
 import com.flarelabsmc.wares.util.VoxelShapeUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -95,7 +95,7 @@ public class CardboardBoxBlock extends Block {
                 level.setBlock(pos, blockState.setValue(BOXES, packages), Block.UPDATE_ALL);
 
 
-            level.playSound(null, pos, Wares.SoundEvents.CARDBOARD_HIT.get(), SoundSource.BLOCKS, 0.9f, level.getRandom().nextFloat() * 0.1f + 0.95f);
+            level.playSound(null, pos, WaresSoundEvents.CARDBOARD_HIT.get(), SoundSource.BLOCKS, 0.9f, level.getRandom().nextFloat() * 0.1f + 0.95f);
 
             player.addItem(new ItemStack(this.asItem()));
             return InteractionResult.SUCCESS;

@@ -1,9 +1,9 @@
 package com.flarelabsmc.wares.content.block;
 
-import com.flarelabsmc.wares.Wares;
 import com.flarelabsmc.wares.content.block.entity.PackageBlockEntity;
 import com.flarelabsmc.wares.config.Config;
 import com.flarelabsmc.wares.registry.WaresItems;
+import com.flarelabsmc.wares.registry.WaresSoundEvents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -85,7 +85,7 @@ public class PackageBlock extends BaseEntityBlock {
                     }
 
                     level.playSound(null, pos.getX() + 0.5f, pos.getY() + 0.5f, pos.getZ() + 0.5f,
-                            Wares.SoundEvents.PAPER_TEAR.get(), SoundSource.PLAYERS,
+                            WaresSoundEvents.PAPER_TEAR.get(), SoundSource.PLAYERS,
                             1f, level.getRandom().nextFloat() * 0.5f + 0.8f);
                 }
                 else {

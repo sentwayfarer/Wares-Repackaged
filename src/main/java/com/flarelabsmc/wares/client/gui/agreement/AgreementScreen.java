@@ -1,5 +1,6 @@
 package com.flarelabsmc.wares.client.gui.agreement;
 
+import com.flarelabsmc.wares.registry.WaresSoundEvents;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.flarelabsmc.mpfui.component.HorizontalAlignment;
 import com.flarelabsmc.mpfui.component.Rectangle;
@@ -60,7 +61,7 @@ public class AgreementScreen extends AbstractContainerScreen<AgreementMenu> {
             minecraft.setScreen(this);
 
             Vec3 pos = menu.player.position();
-            menu.level.playSound(menu.player, pos.x, pos.y, pos.z, Wares.SoundEvents.PAPER_CRACKLE.get(), SoundSource.MASTER,
+            menu.level.playSound(menu.player, pos.x, pos.y, pos.z, WaresSoundEvents.PAPER_CRACKLE.get(), SoundSource.MASTER,
                     1f, menu.level.getRandom().nextFloat() * 0.1f + 0.9f);
         }
     }
@@ -72,7 +73,7 @@ public class AgreementScreen extends AbstractContainerScreen<AgreementMenu> {
             parentScreen = null;
 
             Vec3 pos = menu.player.position();
-            menu.level.playSound(menu.player, pos.x, pos.y, pos.z, Wares.SoundEvents.PAPER_CRACKLE.get(), SoundSource.MASTER,
+            menu.level.playSound(menu.player, pos.x, pos.y, pos.z, WaresSoundEvents.PAPER_CRACKLE.get(), SoundSource.MASTER,
                     1f, menu.level.getRandom().nextFloat() * 0.1f + 1.2f);
 
             return;

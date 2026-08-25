@@ -1,9 +1,9 @@
 package com.flarelabsmc.wares.content.block;
 
 import com.flarelabsmc.wares.registry.WaresBlockEntities;
+import com.flarelabsmc.wares.registry.WaresSoundEvents;
 import com.flarelabsmc.wares.registry.WaresStats;
 import com.mojang.serialization.MapCodec;
-import com.flarelabsmc.wares.Wares;
 import com.flarelabsmc.wares.content.block.entity.DeliveryTableBlockEntity;
 import com.flarelabsmc.wares.client.gui.agreement.AgreementGUI;
 import com.flarelabsmc.wares.data.agreement.DeliveryAgreement;
@@ -139,7 +139,7 @@ public class DeliveryTableBlock extends BaseEntityBlock {
                     pos.getX() + 0.5f,
                     pos.getY() + 1f,
                     pos.getZ() + 0.5f,
-                    Wares.SoundEvents.PAPER_CRACKLE.get(),
+                    WaresSoundEvents.PAPER_CRACKLE.get(),
                     SoundSource.PLAYERS,
                     1f,
                     level.getRandom().nextFloat() * 0.1f + 0.8f
@@ -188,7 +188,7 @@ public class DeliveryTableBlock extends BaseEntityBlock {
                             pos.getX() + 0.5f,
                             pos.getY() + 1f,
                             pos.getZ() + 0.5f,
-                            Wares.SoundEvents.PAPER_CRACKLE.get(),
+                            WaresSoundEvents.PAPER_CRACKLE.get(),
                             SoundSource.PLAYERS,
                             1f,
                             level.getRandom().nextFloat() * 0.1f + 1.1f

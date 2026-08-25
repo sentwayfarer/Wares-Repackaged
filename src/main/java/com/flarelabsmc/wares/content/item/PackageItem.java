@@ -1,9 +1,9 @@
 package com.flarelabsmc.wares.content.item;
 
-import com.flarelabsmc.wares.Wares;
 import com.flarelabsmc.wares.content.block.entity.PackageBlockEntity;
 import com.flarelabsmc.wares.config.Config;
 import com.flarelabsmc.wares.data.Package;
+import com.flarelabsmc.wares.registry.WaresSoundEvents;
 import com.flarelabsmc.wares.registry.WaresStats;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
@@ -60,7 +60,7 @@ public class PackageItem extends BlockItem {
 
     @Override
     public @NotNull SoundEvent getEatingSound() {
-        return Wares.SoundEvents.PAPER_TEAR.get();
+        return WaresSoundEvents.PAPER_TEAR.get();
     }
 
     @Override
@@ -105,7 +105,7 @@ public class PackageItem extends BlockItem {
             for (ItemStack itemStack : pack.getItems(serverLevel, livingEntity.position())) {
                 Containers.dropItemStack(level, pos.x, pos.y, pos.z, itemStack);
             }
-            level.playSound(null, pos.x, pos.y, pos.z, Wares.SoundEvents.CARDBOARD_HIT.get(), SoundSource.PLAYERS,
+            level.playSound(null, pos.x, pos.y, pos.z, WaresSoundEvents.CARDBOARD_HIT.get(), SoundSource.PLAYERS,
                     1f, level.getRandom().nextFloat() * 0.2f + 0.9f);
 
             if (livingEntity instanceof ServerPlayer serverPlayer)

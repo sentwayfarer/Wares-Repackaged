@@ -1,5 +1,6 @@
 package com.flarelabsmc.wares.client.gui.agreement;
 
+import com.flarelabsmc.wares.registry.WaresSoundEvents;
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -76,7 +77,7 @@ public class SealedAgreementScreen extends Screen {
             minecraft.setScreen(this);
 
             assert minecraft.player != null;
-            minecraft.player.playSound(Wares.SoundEvents.PAPER_CRACKLE.get(), 1f, minecraft.player.level().getRandom().nextFloat() * 0.1f + 0.9f);
+            minecraft.player.playSound(WaresSoundEvents.PAPER_CRACKLE.get(), 1f, minecraft.player.level().getRandom().nextFloat() * 0.1f + 0.9f);
         }
     }
 
@@ -87,7 +88,7 @@ public class SealedAgreementScreen extends Screen {
             parentScreen = null;
 
             assert minecraft.player != null;
-            minecraft.player.playSound(Wares.SoundEvents.PAPER_CRACKLE.get(), 1f, minecraft.player.level().getRandom().nextFloat() * 0.1f + 1.2f);
+            minecraft.player.playSound(WaresSoundEvents.PAPER_CRACKLE.get(), 1f, minecraft.player.level().getRandom().nextFloat() * 0.1f + 1.2f);
 
             return;
         }
@@ -252,7 +253,7 @@ public class SealedAgreementScreen extends Screen {
             assert Minecraft.getInstance().player != null;
             RandomSource random = Minecraft.getInstance().level.random;
             float pitch = random.nextFloat() * 0.2f + (isFlipped ? 1.1f : 1.5f);
-            Minecraft.getInstance().player.playSound(Wares.SoundEvents.PAPER_CRACKLE.get(), 0.65f, pitch);
+            Minecraft.getInstance().player.playSound(WaresSoundEvents.PAPER_CRACKLE.get(), 0.65f, pitch);
         }
     }
 

@@ -2,6 +2,7 @@ package com.flarelabsmc.wares.menu;
 
 import com.flarelabsmc.wares.registry.WaresItems;
 import com.flarelabsmc.wares.registry.WaresMenuTypes;
+import com.flarelabsmc.wares.registry.WaresSoundEvents;
 import com.mojang.datafixers.util.Either;
 import com.mojang.datafixers.util.Pair;
 import com.flarelabsmc.wares.Wares;
@@ -135,7 +136,7 @@ public class CardboardBoxMenu extends AbstractContainerMenu {
             if (!player.addItem(packageStack))
                 player.drop(packageStack, false);
 
-            player.level().playSound(null, player, Wares.SoundEvents.CARDBOARD_BOX_USE.get(), SoundSource.PLAYERS,
+            player.level().playSound(null, player, WaresSoundEvents.CARDBOARD_BOX_USE.get(), SoundSource.PLAYERS,
                     1f, player.level().getRandom().nextFloat() * 0.3f + 0.85f);
 
             this.itemsPacked = true;

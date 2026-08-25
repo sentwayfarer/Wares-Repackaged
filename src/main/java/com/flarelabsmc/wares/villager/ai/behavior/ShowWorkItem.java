@@ -1,8 +1,8 @@
 package com.flarelabsmc.wares.villager.ai.behavior;
 
 import com.flarelabsmc.wares.registry.WaresItems;
+import com.flarelabsmc.wares.registry.WaresSoundEvents;
 import com.google.common.collect.ImmutableMap;
-import com.flarelabsmc.wares.Wares;
 import com.flarelabsmc.wares.content.block.entity.DeliveryTableBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
@@ -62,7 +62,7 @@ public class ShowWorkItem extends Behavior<Villager> {
         super.start(level, villager, gameTime);
         villager.setItemSlot(EquipmentSlot.MAINHAND, item);
         villager.setDropChance(EquipmentSlot.MAINHAND, 0f);
-        level.playSound(null, villager, Wares.SoundEvents.VILLAGER_WORK_PACKAGER.get(), SoundSource.NEUTRAL,
+        level.playSound(null, villager, WaresSoundEvents.VILLAGER_WORK_PACKAGER.get(), SoundSource.NEUTRAL,
                 0.8f, level.getRandom().nextFloat() * 0.15f + 1f);
     }
 
@@ -71,7 +71,7 @@ public class ShowWorkItem extends Behavior<Villager> {
         super.stop(level, villager, gameTime);
         villager.setItemSlot(EquipmentSlot.MAINHAND, ItemStack.EMPTY);
         villager.setDropChance(EquipmentSlot.MAINHAND, 0.085f);
-        level.playSound(null, villager, Wares.SoundEvents.VILLAGER_WORK_PACKAGER.get(), SoundSource.NEUTRAL,
+        level.playSound(null, villager, WaresSoundEvents.VILLAGER_WORK_PACKAGER.get(), SoundSource.NEUTRAL,
                 0.8f, level.getRandom().nextFloat() * 0.15f + 0.75f);
         showCooldownTimestamp = gameTime + level.getRandom().nextInt(SHOW_COOLDOWN_MIN, SHOW_COOLDOWN_MAX);
     }

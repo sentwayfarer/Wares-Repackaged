@@ -13,6 +13,7 @@ import com.flarelabsmc.wares.menu.DeliveryTableMenu;
 import com.flarelabsmc.wares.registry.WaresBlockEntities;
 import com.flarelabsmc.wares.registry.WaresItems;
 import com.flarelabsmc.wares.registry.WaresProfessions;
+import com.flarelabsmc.wares.registry.WaresSoundEvents;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.Util;
 import net.minecraft.core.*;
@@ -186,10 +187,10 @@ public class DeliveryTableBlockEntity extends BaseContainerBlockEntity implement
             return;
 
         deliveringManually = false;
-        level.playSound(null, getBlockPos(), Wares.SoundEvents.CARDBOARD_FALL.get(), SoundSource.BLOCKS,
+        level.playSound(null, getBlockPos(), WaresSoundEvents.CARDBOARD_FALL.get(), SoundSource.BLOCKS,
                 0.85f, level.getRandom().nextFloat() * 0.1f + 0.95f);
         if (!getAgreement().isInfinite()) {
-            level.playSound(null, getBlockPos(), Wares.SoundEvents.WRITING.get(), SoundSource.BLOCKS,
+            level.playSound(null, getBlockPos(), WaresSoundEvents.WRITING.get(), SoundSource.BLOCKS,
                     0.5f, level.getRandom().nextFloat() * 0.1f + 0.95f);
         }
 

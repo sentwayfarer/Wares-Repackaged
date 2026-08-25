@@ -1,9 +1,9 @@
 package com.flarelabsmc.wares.content.item;
 
-import com.flarelabsmc.wares.Wares;
 import com.flarelabsmc.wares.menu.CardboardBoxMenu;
 import com.flarelabsmc.wares.registry.WaresBlocks;
 import com.flarelabsmc.wares.registry.WaresItems;
+import com.flarelabsmc.wares.registry.WaresSoundEvents;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
@@ -56,7 +56,7 @@ public class CardboardBoxItem extends BlockItem {
                         new CardboardBoxMenu(containerId, playerInventory), cardboardBoxStack.getHoverName()),
                 buffer -> buffer.writeItemStack(cardboardBoxStack, false));
 
-        serverPlayer.level().playSound(null, serverPlayer, Wares.SoundEvents.CARDBOARD_BOX_USE.get(), SoundSource.PLAYERS,
+        serverPlayer.level().playSound(null, serverPlayer, WaresSoundEvents.CARDBOARD_BOX_USE.get(), SoundSource.PLAYERS,
                 1f, serverPlayer.level().getRandom().nextFloat() * 0.3f + 0.85f);
     }
 }
