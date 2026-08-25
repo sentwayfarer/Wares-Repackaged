@@ -56,6 +56,6 @@ public class Seal {
         ResourceManager resourceManager = Minecraft.getInstance().getResourceManager();
         Map<ResourceLocation, Resource> resourceLocationResourceMap = resourceManager.listResources(SEAL_FOLDER,
                 resourceLocation -> resourceLocation.equals(getTexturePath()));
-        return resourceLocationResourceMap.size() > 0;
+        return !resourceLocationResourceMap.isEmpty();
     }
 }

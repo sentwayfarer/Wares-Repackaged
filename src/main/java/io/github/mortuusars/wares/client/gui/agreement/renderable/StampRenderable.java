@@ -18,7 +18,7 @@ public class StampRenderable extends TextureRenderable {
     }
 
     @Override
-    protected void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
+    public void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
         PoseStack poseStack = graphics.pose();
         poseStack.pushPose();
 

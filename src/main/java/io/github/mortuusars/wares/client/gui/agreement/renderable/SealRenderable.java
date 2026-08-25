@@ -16,8 +16,9 @@ public class SealRenderable extends TextureRenderable {
         this.texture = seal.getTexturePath();
         this.shadowHeight = shadowHeight;
     }
+
     @Override
-    protected void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float pPartialTick) {
+    public void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float pPartialTick) {
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderTexture(0, texture);
 

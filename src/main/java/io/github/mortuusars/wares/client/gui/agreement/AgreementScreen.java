@@ -34,8 +34,8 @@ import java.util.List;
 import java.util.Optional;
 
 public class AgreementScreen extends AbstractContainerScreen<AgreementMenu> {
-    private static final ResourceLocation TEXTURE = new ResourceLocation(Wares.ID, "textures/gui/agreement.png");
-    private static final ResourceLocation STAMPS_TEXTURE = new ResourceLocation(Wares.ID, "textures/gui/stamps.png");
+    private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(Wares.ID, "textures/gui/agreement.png");
+    private static final ResourceLocation STAMPS_TEXTURE = ResourceLocation.fromNamespaceAndPath(Wares.ID, "textures/gui/stamps.png");
     private static final int FONT_COLOR = 0xff886447;
     private final Seal seal;
     private Screen parentScreen;
@@ -207,7 +207,7 @@ public class AgreementScreen extends AbstractContainerScreen<AgreementMenu> {
 
     @Override
     public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
-        this.renderBackground(graphics);
+        this.renderBackground(graphics, mouseX, mouseY, partialTick);
         super.render(graphics, mouseX, mouseY, partialTick);
         this.renderTooltip(graphics, mouseX, mouseY);
     }
@@ -261,10 +261,10 @@ public class AgreementScreen extends AbstractContainerScreen<AgreementMenu> {
     }
 
     @Override
-    public boolean mouseScrolled(double pMouseX, double pMouseY, double pDelta) {
-        boolean handled = super.mouseScrolled(pMouseX, pMouseY, pDelta);
+    public boolean mouseScrolled(double mouseX, double mouseY, double scrollX, double scrollY) {
+        boolean handled = super.mouseScrolled(mouseX, mouseY, scrollX, scrollY);
         if (!handled) {
-            cycleDisplayItems(pDelta > 0.0);
+            cycleDisplayItems(scrollY > 0.0);
             displayItemCycleTimer = 1;
         }
         return handled;

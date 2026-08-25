@@ -29,7 +29,7 @@ public class AgreementLayout {
         if (getElement(type) != null)
             throw new IllegalStateException("Attempted to add same type of element twice.");
 
-        int lastX = elements.size() > 0 ? elements.get(elements.size() - 1).right().bottom() : 0;
+        int lastX = !elements.isEmpty() ? elements.get(elements.size() - 1).right().bottom() : 0;
         elements.add(Pair.of(type, new Rectangle(xPos, lastX + spacing, width, height)));
         return this;
     }
@@ -40,7 +40,7 @@ public class AgreementLayout {
     }
 
     public int getHeight() {
-        if (elements.size() == 0)
+        if (elements.isEmpty())
             return 0;
 
         int yMin = Integer.MAX_VALUE;
