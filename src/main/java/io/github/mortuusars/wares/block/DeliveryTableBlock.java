@@ -32,6 +32,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
@@ -106,60 +107,149 @@ public class DeliveryTableBlock extends BaseEntityBlock {
                 : null;
     }
 
-    @Override
-    public InteractionResult use(BlockState blockState, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
-        if (!(level.getBlockEntity(pos) instanceof DeliveryTableBlockEntity deliveryTableBlockEntity))
-            return InteractionResult.FAIL;
-
+    private void startUse(DeliveryTableBlockEntity blockEntity, Player player)
+    {
         if (player instanceof ServerPlayer serverPlayer) {
-            deliveryTableBlockEntity.trySetOwner(serverPlayer);
+            blockEntity.trySetOwner(serverPlayer);
             player.awardStat(Wares.Stats.INTERACT_WITH_DELIVERY_TABLE);
         }
+    }
 
-        // PLACE
-        ItemStack stackInHand = player.getItemInHand(hand);
-        if (stackInHand.getItem() instanceof DeliveryAgreementItem
+    private boolean tryPlaceDeliveryItem(
+            ItemStack stack,
+            BlockHitResult hitResult,
+            DeliveryTableBlockEntity blockEntity,
+            Level level,
+            Player player,
+            BlockPos pos
+    ) {
+        if (stack.getItem() instanceof DeliveryAgreementItem
                 && hitResult.getDirection() == Direction.UP
-                && deliveryTableBlockEntity.getAgreementItem().isEmpty()) {
-            deliveryTableBlockEntity.setAgreementItem(stackInHand.split(1));
-            level.playSound(player, pos.getX() + 0.5f, pos.getY() + 1f, pos.getZ() + 0.5f,
-                    Wares.SoundEvents.PAPER_CRACKLE.get(), SoundSource.PLAYERS, 1f, level.getRandom().nextFloat() * 0.1f + 0.8f);
-            return InteractionResult.SUCCESS;
+                && blockEntity.getAgreementItem().isEmpty()) {
+            blockEntity.setAgreementItem(stack.split(1));
+            level.playSound(
+                    player,
+                    pos.getX() + 0.5f,
+                    pos.getY() + 1f,
+                    pos.getZ() + 0.5f,
+                    Wares.SoundEvents.PAPER_CRACKLE.get(),
+                    SoundSource.PLAYERS,
+                    1f,
+                    level.getRandom().nextFloat() * 0.1f + 0.8f
+            );
+            return true;
         }
 
-        // REMOVE
-        ItemStack agreementStack = deliveryTableBlockEntity.getAgreementItem();
+        return false;
+    }
+
+    private boolean tryGetDeliveryItem(
+            DeliveryTableBlockEntity blockEntity,
+            Player player,
+            Level level,
+            BlockPos pos,
+            BlockHitResult hitResult
+    ) {
+        ItemStack agreementStack = blockEntity.getAgreementItem();
         if (!agreementStack.isEmpty() && hitResult.getLocation().y > pos.getY() + 1) {
             if (player.isSecondaryUseActive()) {
                 if (!level.isClientSide) {
-                    if (deliveryTableBlockEntity.isAgreementLocked()) {
-                        player.displayClientMessage(Component.translatable("block.wares.delivery_table.agreement_locked"), true);
-                        return InteractionResult.SUCCESS;
+                    if (blockEntity.isAgreementLocked()) {
+                        player.displayClientMessage(
+                                Component.translatable("block.wares.delivery_table.agreement_locked"),
+                                true
+                        );
+                        return true;
                     }
 
-                    agreementStack = deliveryTableBlockEntity.extractAgreementItem();
+                    agreementStack = blockEntity.extractAgreementItem();
 
-                    ItemEntity item = new ItemEntity(level, pos.getX() + 0.5, pos.getY() + 1.1, pos.getZ() + 0.5, agreementStack);
-                    Vec3 delta = Vec3.atCenterOf(pos).lerp(player.position(), 0.05D).subtract(Vec3.atCenterOf(pos));
+                    ItemEntity item = new ItemEntity(
+                            level,
+                            pos.getX() + 0.5,
+                            pos.getY() + 1.1,
+                            pos.getZ() + 0.5,
+                            agreementStack
+                    );
+                    Vec3 delta = Vec3.atCenterOf(pos)
+                            .lerp(player.position(), 0.05D)
+                            .subtract(Vec3.atCenterOf(pos));
                     item.setDeltaMovement(delta.x, delta.y + 0.25, delta.z);
                     level.addFreshEntity(item);
-                    level.playSound(null, pos.getX() + 0.5f, pos.getY() + 1f, pos.getZ() + 0.5f,
-                            Wares.SoundEvents.PAPER_CRACKLE.get(), SoundSource.PLAYERS, 1f, level.getRandom().nextFloat() * 0.1f + 1.1f);
+                    level.playSound(
+                            null,
+                            pos.getX() + 0.5f,
+                            pos.getY() + 1f,
+                            pos.getZ() + 0.5f,
+                            Wares.SoundEvents.PAPER_CRACKLE.get(),
+                            SoundSource.PLAYERS,
+                            1f,
+                            level.getRandom().nextFloat() * 0.1f + 1.1f
+                    );
                 }
 
-                return InteractionResult.SUCCESS;
+                return true;
             }
-            else if (deliveryTableBlockEntity.getAgreement() != DeliveryAgreement.EMPTY){
+            else if (blockEntity.getAgreement() != DeliveryAgreement.EMPTY){
                 if (level.isClientSide)
-                    AgreementGUI.showAsOverlay(player, deliveryTableBlockEntity::getAgreement);
-                return InteractionResult.SUCCESS;
+                    AgreementGUI.showAsOverlay(player, blockEntity::getAgreement);
+                return true;
             }
         }
 
+        return false;
+    }
+
+    private void openMenuOnUse(DeliveryTableBlockEntity blockEntity, Player player, BlockPos pos)
+    {
         if (player instanceof ServerPlayer serverPlayer) {
-            deliveryTableBlockEntity.trySetOwner(serverPlayer);
-            NetworkHooks.openScreen(serverPlayer, deliveryTableBlockEntity, pos);
+            blockEntity.trySetOwner(serverPlayer);
+            serverPlayer.openMenu(blockEntity, pos);
         }
+    }
+
+    @Override
+    public ItemInteractionResult useItemOn(
+            ItemStack stack,
+            BlockState state,
+            Level level,
+            BlockPos pos,
+            Player player,
+            InteractionHand hand,
+            BlockHitResult hitResult
+    ) {
+        if (!(level.getBlockEntity(pos) instanceof DeliveryTableBlockEntity blockEntity))
+            return ItemInteractionResult.FAIL;
+
+        startUse(blockEntity, player);
+
+        if (tryPlaceDeliveryItem(stack, hitResult, blockEntity, level, player, pos))
+            return ItemInteractionResult.SUCCESS;
+
+        if (tryGetDeliveryItem(blockEntity, player, level, pos, hitResult))
+            return ItemInteractionResult.SUCCESS;
+
+        openMenuOnUse(blockEntity, player, pos);
+
+        return ItemInteractionResult.sidedSuccess(level.isClientSide);
+    }
+
+    @Override
+    protected InteractionResult useWithoutItem(
+            BlockState state,
+            Level level,
+            BlockPos pos,
+            Player player,
+            BlockHitResult hitResult
+    ) {
+        if (!(level.getBlockEntity(pos) instanceof DeliveryTableBlockEntity blockEntity))
+            return InteractionResult.FAIL;
+
+        startUse(blockEntity, player);
+
+        if (tryGetDeliveryItem(blockEntity, player, level, pos, hitResult)) return InteractionResult.SUCCESS;
+
+        openMenuOnUse(blockEntity, player, pos);
 
         return InteractionResult.sidedSuccess(level.isClientSide);
     }
