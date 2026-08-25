@@ -6,6 +6,7 @@ import io.github.mortuusars.wares.client.gui.agreement.AgreementGUI;
 import io.github.mortuusars.wares.data.agreement.DeliveryAgreement;
 import io.github.mortuusars.wares.util.ClientHelper;
 import net.minecraft.ChatFormatting;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
@@ -24,10 +25,13 @@ import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
 
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public class DeliveryAgreementItem extends Item {
 
     public DeliveryAgreementItem(Properties properties) {
@@ -35,13 +39,13 @@ public class DeliveryAgreementItem extends Item {
     }
 
     @Override
-    public void appendHoverText(@NotNull ItemStack stack, @Nullable Level level, @NotNull List<Component> tooltipComponents, @NotNull TooltipFlag isAdvanced) {
+    public void appendHoverText(ItemStack stack, Level level, List<Component> tooltipComponents, TooltipFlag isAdvanced) {
         getAgreementFromStack(stack).ifLeft(agreement ->
                 tooltipComponents.add(Component.translatable("item.wares.agreement.view.tooltip").withStyle(Style.EMPTY.withColor(0xd6b589))));
     }
 
     @Override
-    public boolean overrideOtherStackedOnMe(ItemStack agreementStack, @NotNull ItemStack otherStack, @NotNull Slot slot, @NotNull ClickAction action, @NotNull Player player, @NotNull SlotAccess slotAccess) {
+    public boolean overrideOtherStackedOnMe(ItemStack agreementStack, ItemStack otherStack, Slot slot, ClickAction action, Player player, SlotAccess slotAccess) {
         // This method is called only client-side when in creative inventory,
 
         if (agreementStack.getItem() == this && otherStack.isEmpty() && action == ClickAction.SECONDARY) {
@@ -73,7 +77,7 @@ public class DeliveryAgreementItem extends Item {
 
     @SuppressWarnings("DataFlowIssue")
     @Override
-    public void inventoryTick(ItemStack stack, @NotNull Level level, @NotNull Entity entity, int slotId, boolean isSelected) {
+    public void inventoryTick(ItemStack stack, Level level, Entity entity, int slotId, boolean isSelected) {
         if (stack.is(Wares.Items.DELIVERY_AGREEMENT.get()) && entity instanceof ServerPlayer serverPlayer && stack.hasTag()) {
 
             boolean isExpired = false;
@@ -99,7 +103,7 @@ public class DeliveryAgreementItem extends Item {
         }
     }
 
-    public static @NotNull ItemStack convertToExpired(ItemStack stack) {
+    public static ItemStack convertToExpired(ItemStack stack) {
         if (stack.isEmpty())
             throw new IllegalStateException("Tried to convert an empty ItemStack to Expired Delivery Agreement.");
         else if (stack.is(Wares.Items.COMPLETED_DELIVERY_AGREEMENT.get()))
@@ -121,7 +125,7 @@ public class DeliveryAgreementItem extends Item {
         return expiredStack;
     }
 
-    public static @NotNull ItemStack convertToCompleted(ItemStack stack) {
+    public static ItemStack convertToCompleted(ItemStack stack) {
         if (stack.isEmpty())
             throw new IllegalStateException("Tried to convert an empty ItemStack to Completed Delivery Agreement.");
         else if (stack.is(Wares.Items.EXPIRED_DELIVERY_AGREEMENT.get()))
@@ -144,7 +148,7 @@ public class DeliveryAgreementItem extends Item {
     }
 
     @Override
-    public @NotNull InteractionResultHolder<ItemStack> use(@NotNull Level level, Player player, @NotNull InteractionHand hand) {
+    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         ItemStack usedItemStack = player.getItemInHand(hand);
         if (level.isClientSide) {
             Either<DeliveryAgreement, AgreementError> agreementOrError = getAgreementFromStack(usedItemStack);
