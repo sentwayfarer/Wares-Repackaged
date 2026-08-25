@@ -564,6 +564,26 @@ public class DeliveryTableBlockEntity extends BaseContainerBlockEntity implement
     }
 
     @Override
+    protected NonNullList<ItemStack> getItems() {
+        var itemList = NonNullList.<ItemStack>create();
+
+        for (var i = 0; i < SLOTS; i++)
+        {
+            itemList.add(inventory.getStackInSlot(i));
+        }
+
+        return itemList;
+    }
+
+    @Override
+    protected void setItems(NonNullList<ItemStack> itemStacks) {
+        for (var i = 0; i < SLOTS; i++)
+        {
+            inventory.setStackInSlot(i, itemStacks.get(i));
+        }
+    }
+
+    @Override
     protected AbstractContainerMenu createMenu(int containerId, Inventory inventory) {
         return new DeliveryTableMenu(containerId, inventory, this, containerData);
     }
