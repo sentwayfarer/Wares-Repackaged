@@ -128,9 +128,9 @@ public record SealedDeliveryAgreement(String id,
     @NotNull
     private static Function<SealedRequestedItem, RequestedItem> mapSealedItem(ServerLevel level) {
         return sealedItem -> new RequestedItem(
-                sealedItem.getTagOrItem(),
-                sealedItem.getCount().map(integer -> integer, steppedInt -> steppedInt.sample(level.getRandom())),
-                sealedItem.getTag());
+                sealedItem.tagOrItem(),
+                sealedItem.count().map(integer -> integer, steppedInt -> steppedInt.sample(level.getRandom())),
+                sealedItem.tag());
     }
 
     private List<ItemStack> realizePayment(Either<ResourceLocation, List<ItemStack>> payment, ServerLevel level, int maxCount) {

@@ -129,7 +129,7 @@ public class AgreementTest implements ITestClass {
 
                 boolean paymentItemsEqual = decodedPay.length == agreementPay.length;
                 for (int i = 0; i < decodedPay.length; i++) {
-                    if (!ItemStack.isSameItemSameTags(agreementPay[i], decodedPay[i])) {
+                    if (!ItemStack.isSameItemSameComponents(agreementPay[i], decodedPay[i])) {
                         paymentItemsEqual = false;
                         break;
                     }

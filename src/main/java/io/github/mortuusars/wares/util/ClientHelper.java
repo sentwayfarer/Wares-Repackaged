@@ -14,7 +14,7 @@ public class ClientHelper {
     }
 
     public static boolean isViewingInDeliveryTableScreen(ItemStack agreementStack) {
-        return Minecraft.getInstance().screen instanceof DeliveryTableScreen deliveryTableScreen && ItemStack.isSameItemSameTags(deliveryTableScreen.getMenu().blockEntity.getAgreementItem(), agreementStack);
+        return Minecraft.getInstance().screen instanceof DeliveryTableScreen deliveryTableScreen && ItemStack.isSameItemSameComponents(deliveryTableScreen.getMenu().blockEntity.getAgreementItem(), agreementStack);
     }
 
     public static Supplier<DeliveryAgreement> getDeliveryTableAgreementSupplier(DeliveryAgreement fallbackAgreement) {

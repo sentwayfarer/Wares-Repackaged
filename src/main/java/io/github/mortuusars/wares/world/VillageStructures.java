@@ -13,7 +13,7 @@ import net.minecraft.world.level.levelgen.structure.pools.SinglePoolElement;
 import net.minecraft.world.level.levelgen.structure.pools.StructurePoolElement;
 import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorList;
-import net.minecraftforge.event.server.ServerAboutToStartEvent;
+import net.neoforged.neoforge.event.server.ServerAboutToStartEvent;
 import org.slf4j.Logger;
 
 import java.util.ArrayList;
@@ -22,9 +22,11 @@ import java.util.List;
 @SuppressWarnings({"unused", "SameParameterValue"})
 public class VillageStructures {
     private static final ResourceKey<StructureProcessorList> EMPTY_PROCESSOR_LIST_KEY = ResourceKey.create(
-            Registries.PROCESSOR_LIST, new ResourceLocation("minecraft", "empty"));
+            Registries.PROCESSOR_LIST, ResourceLocation.fromNamespaceAndPath("minecraft", "empty")
+    );
     private static final ResourceKey<StructureProcessorList> MOSSIFY_10_PROCESSOR_LIST_KEY = ResourceKey.create(
-            Registries.PROCESSOR_LIST, new ResourceLocation("minecraft", "mossify_10_percent"));
+            Registries.PROCESSOR_LIST, ResourceLocation.fromNamespaceAndPath("minecraft", "mossify_10_percent")
+    );
 
 
     @SuppressWarnings("OptionalGetWithoutIsPresent")
@@ -40,23 +42,23 @@ public class VillageStructures {
         int weight = Config.WAREHOUSE_WEIGHT.get();
 
         VillageStructures.addStructureToPoolSingle(templatePools, mossify10ProcessorList,
-                new ResourceLocation("minecraft:village/plains/houses"),
+                ResourceLocation.parse("minecraft:village/plains/houses"),
                 Wares.ID + ":village/houses/plains_warehouse",  StructureTemplatePool.Projection.RIGID, weight);
 
         VillageStructures.addStructureToPoolSingle(templatePools, mossify10ProcessorList,
-                new ResourceLocation("minecraft:village/taiga/houses"),
+                ResourceLocation.parse("minecraft:village/taiga/houses"),
                 Wares.ID + ":village/houses/taiga_warehouse",  StructureTemplatePool.Projection.RIGID, weight);
 
         VillageStructures.addStructureToPoolSingle(templatePools, mossify10ProcessorList,
-                new ResourceLocation("minecraft:village/desert/houses"),
+                ResourceLocation.parse("minecraft:village/desert/houses"),
                 Wares.ID + ":village/houses/desert_warehouse",  StructureTemplatePool.Projection.RIGID, weight);
 
         VillageStructures.addStructureToPoolSingle(templatePools, mossify10ProcessorList,
-                new ResourceLocation("minecraft:village/savanna/houses"),
+                ResourceLocation.parse("minecraft:village/savanna/houses"),
                 Wares.ID + ":village/houses/savanna_warehouse",  StructureTemplatePool.Projection.RIGID, weight);
 
         VillageStructures.addStructureToPoolSingle(templatePools, mossify10ProcessorList,
-                new ResourceLocation("minecraft:village/snowy/houses"),
+                ResourceLocation.parse("minecraft:village/snowy/houses"),
                 Wares.ID + ":village/houses/snowy_warehouse",  StructureTemplatePool.Projection.RIGID, weight);
     }
 

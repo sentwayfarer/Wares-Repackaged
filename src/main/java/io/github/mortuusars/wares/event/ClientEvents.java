@@ -3,21 +3,18 @@ package io.github.mortuusars.wares.event;
 import io.github.mortuusars.wares.Wares;
 import io.github.mortuusars.wares.client.gui.screen.CardboardBoxScreen;
 import io.github.mortuusars.wares.client.gui.screen.DeliveryTableScreen;
-import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.world.item.CreativeModeTabs;
-import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
+import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 
-@Mod.EventBusSubscriber(modid = Wares.ID, bus = Mod.EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = Wares.ID)
 public class ClientEvents {
     @SubscribeEvent
-    public static void clientSetup(final FMLClientSetupEvent event) {
-        event.enqueueWork(() -> {
-            MenuScreens.register(Wares.MenuTypes.DELIVERY_TABLE.get(), DeliveryTableScreen::new);
-            MenuScreens.register(Wares.MenuTypes.CARDBOARD_BOX.get(), CardboardBoxScreen::new);
-        });
+    public static void clientSetup(final RegisterMenuScreensEvent event) {
+        event.register(Wares.MenuTypes.DELIVERY_TABLE.get(), DeliveryTableScreen::new);
+        event.register(Wares.MenuTypes.CARDBOARD_BOX.get(), CardboardBoxScreen::new);
     }
 
     @SubscribeEvent

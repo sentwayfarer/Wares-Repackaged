@@ -40,10 +40,10 @@ public class PackageItem extends BlockItem {
     }
 
     @Override
-    public void appendHoverText(@NotNull ItemStack stack, @Nullable Level level, @NotNull List<Component> tooltip, @NotNull TooltipFlag flag) {
-        super.appendHoverText(stack, level, tooltip, flag);
+    public void appendHoverText(@NotNull ItemStack stack, TooltipContext context, @NotNull List<Component> tooltip, @NotNull TooltipFlag flag) {
+        super.appendHoverText(stack, context, tooltip, flag);
 
-        if (level != null && level.isClientSide) {
+        if (context.level() != null && context.level().isClientSide) {
             Package.fromItemStack(stack).ifPresent(pkg -> {
                 String sender = pkg.sender();
                 if (!sender.isEmpty())
@@ -64,7 +64,7 @@ public class PackageItem extends BlockItem {
     }
 
     @Override
-    public int getUseDuration(@NotNull ItemStack pStack) {
+    public int getUseDuration(@NotNull ItemStack pStack, LivingEntity entity) {
         return 30;
     }
 

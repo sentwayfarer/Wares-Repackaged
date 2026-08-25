@@ -3,7 +3,7 @@ package io.github.mortuusars.wares.block;
 import com.mojang.logging.LogUtils;
 import io.github.mortuusars.wares.config.Config;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.BlockSource;
+import net.minecraft.core.dispenser.BlockSource;
 import net.minecraft.core.Direction;
 import net.minecraft.core.dispenser.OptionalDispenseItemBehavior;
 import net.minecraft.world.item.BlockItem;

@@ -2,54 +2,53 @@ package io.github.mortuusars.wares.config;
 
 import com.google.common.base.Preconditions;
 import net.minecraft.util.Mth;
-import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.fml.ModLoadingContext;
-import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.event.config.ModConfigEvent;
+import net.neoforged.fml.ModContainer;
+import net.neoforged.fml.ModLoadingContext;
+import net.neoforged.fml.config.ModConfig;
+import net.neoforged.fml.event.config.ModConfigEvent;
+import net.neoforged.neoforge.common.ModConfigSpec;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class Config {
-    private static final ForgeConfigSpec COMMON;
-    private static final ForgeConfigSpec CLIENT;
-
-    // TODO: Restructure config for next MC version. (Delivery Table category, Remove PackagerXXX in the names, etc)
+    public static final ModConfigSpec COMMON;
+    public static final ModConfigSpec CLIENT;
 
     // COMMON
-    public static final ForgeConfigSpec.BooleanValue KEEP_SEALED_STACK_NBT_WHEN_OPENED;
-    public static final ForgeConfigSpec.BooleanValue PACKAGER_REQUIRED;
-    public static final ForgeConfigSpec.BooleanValue PACKAGER_SHOULD_BE_WORKING;
-    public static final ForgeConfigSpec.BooleanValue MANUAL_DELIVERY_ALLOWED;
-    public static final ForgeConfigSpec.DoubleValue MANUAL_DELIVERY_TIME_MODIFIER;
-    public static final ForgeConfigSpec.ConfigValue<List<? extends Integer>> BATCH_SIZE_PER_LEVEL;
-    public static final ForgeConfigSpec.ConfigValue<List<? extends Integer>> PACKAGER_XP_PER_LEVEL;
-    public static final ForgeConfigSpec.IntValue DEFAULT_DELIVERY_TIME;
-    public static final ForgeConfigSpec.BooleanValue DELIVERIES_REQUIRE_BOXES;
-    public static final ForgeConfigSpec.BooleanValue TABLE_OUTPUTS_FROM_SIDES;
-    public static final ForgeConfigSpec.BooleanValue MOVE_COMPLETED_AGREEMENT_TO_OUTPUT;
+    public static final ModConfigSpec.BooleanValue KEEP_SEALED_STACK_NBT_WHEN_OPENED;
+    public static final ModConfigSpec.BooleanValue PACKAGER_REQUIRED;
+    public static final ModConfigSpec.BooleanValue PACKAGER_SHOULD_BE_WORKING;
+    public static final ModConfigSpec.BooleanValue MANUAL_DELIVERY_ALLOWED;
+    public static final ModConfigSpec.DoubleValue MANUAL_DELIVERY_TIME_MODIFIER;
+    public static final ModConfigSpec.ConfigValue<List<? extends Integer>> BATCH_SIZE_PER_LEVEL;
+    public static final ModConfigSpec.ConfigValue<List<? extends Integer>> PACKAGER_XP_PER_LEVEL;
+    public static final ModConfigSpec.IntValue DEFAULT_DELIVERY_TIME;
+    public static final ModConfigSpec.BooleanValue DELIVERIES_REQUIRE_BOXES;
+    public static final ModConfigSpec.BooleanValue TABLE_OUTPUTS_FROM_SIDES;
+    public static final ModConfigSpec.BooleanValue MOVE_COMPLETED_AGREEMENT_TO_OUTPUT;
 
     // PACKAGE
-    public static final ForgeConfigSpec.BooleanValue PACKAGE_SNEAK_PREVENTS_UNPACKING;
-    public static final ForgeConfigSpec.BooleanValue PACKAGE_PLACING_REQUIRES_SNEAK;
-    public static final ForgeConfigSpec.BooleanValue PACKAGE_DISPENSER_PLACE;
-    public static final ForgeConfigSpec.BooleanValue PACKAGE_PISTON_DESTROY;
+    public static final ModConfigSpec.BooleanValue PACKAGE_SNEAK_PREVENTS_UNPACKING;
+    public static final ModConfigSpec.BooleanValue PACKAGE_PLACING_REQUIRES_SNEAK;
+    public static final ModConfigSpec.BooleanValue PACKAGE_DISPENSER_PLACE;
+    public static final ModConfigSpec.BooleanValue PACKAGE_PISTON_DESTROY;
 
     // MISC
-    public static final ForgeConfigSpec.BooleanValue LAST_PLAYER_IS_OWNER;
-    public static final ForgeConfigSpec.BooleanValue TRIGGER_FOR_NEAREST_PLAYER;
+    public static final ModConfigSpec.BooleanValue LAST_PLAYER_IS_OWNER;
+    public static final ModConfigSpec.BooleanValue TRIGGER_FOR_NEAREST_PLAYER;
 
-    public static final ForgeConfigSpec.BooleanValue GENERATE_WAREHOUSES;
-    public static final ForgeConfigSpec.IntValue WAREHOUSE_WEIGHT;
-    public static final ForgeConfigSpec.BooleanValue WANDERING_TRADER_AGREEMENTS;
+    public static final ModConfigSpec.BooleanValue GENERATE_WAREHOUSES;
+    public static final ModConfigSpec.IntValue WAREHOUSE_WEIGHT;
+    public static final ModConfigSpec.BooleanValue WANDERING_TRADER_AGREEMENTS;
 
     // CLIENT
-    public static final ForgeConfigSpec.BooleanValue AGREEMENT_CLOSE_WITH_RMB;
-    public static final ForgeConfigSpec.BooleanValue AGREEMENT_APPEND_BUYER_INFO_TO_MESSAGE;
-    public static final ForgeConfigSpec.BooleanValue AGREEMENT_INFINITY_SYMBOL;
+    public static final ModConfigSpec.BooleanValue AGREEMENT_CLOSE_WITH_RMB;
+    public static final ModConfigSpec.BooleanValue AGREEMENT_APPEND_BUYER_INFO_TO_MESSAGE;
+    public static final ModConfigSpec.BooleanValue AGREEMENT_INFINITY_SYMBOL;
 
     static {
-        ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
+        ModConfigSpec.Builder builder = new ModConfigSpec.Builder();
 
         builder.push("Delivery");
 
@@ -181,7 +180,7 @@ public class Config {
         COMMON = builder.build();
 
 
-        builder = new ForgeConfigSpec.Builder();
+        builder = new ModConfigSpec.Builder();
 
         builder.push("AgreementGUI");
 
@@ -232,10 +231,5 @@ public class Config {
 
     public static int getMaxXpPerLevel(final int level) {
         return PACKAGER_XP_PER_LEVEL.get().get(level);
-    }
-
-    public static void init() {
-        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, COMMON);
-        ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, CLIENT);
     }
 }

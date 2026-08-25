@@ -8,15 +8,15 @@ import io.github.mortuusars.wares.data.agreement.SealedDeliveryAgreement;
 import io.github.mortuusars.wares.data.agreement.component.SteppedInt;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.DispenserBlock;
-import net.minecraftforge.common.BasicItemListing;
-import net.minecraftforge.event.RegisterCommandsEvent;
-import net.minecraftforge.event.village.WandererTradesEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.neoforge.common.BasicItemListing;
+import net.neoforged.neoforge.event.RegisterCommandsEvent;
+import net.neoforged.neoforge.event.village.WandererTradesEvent;
 
 public class CommonEvents {
-    @Mod.EventBusSubscriber(modid = Wares.ID, bus = net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus.MOD)
+    @EventBusSubscriber(modid = Wares.ID)
     public static class ModBus {
         @SubscribeEvent
         public static void commonSetup(FMLCommonSetupEvent event) {
@@ -28,7 +28,7 @@ public class CommonEvents {
         }
     }
 
-    @Mod.EventBusSubscriber(modid = Wares.ID, bus = net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus.FORGE)
+    @EventBusSubscriber(modid = Wares.ID)
     public static class ForgeBus {
         @SubscribeEvent
         public static void registerCommands(RegisterCommandsEvent event) {

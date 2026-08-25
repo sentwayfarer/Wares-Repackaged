@@ -38,6 +38,7 @@ import net.minecraft.world.level.material.MapColor;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.config.ModConfig;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.common.extensions.IMenuTypeExtension;
 import net.neoforged.neoforge.common.util.DeferredSoundType;
@@ -57,7 +58,8 @@ public class Wares
 
     public Wares(ModContainer mod, IEventBus bus)
     {
-        Config.init();
+        mod.registerConfig(ModConfig.Type.COMMON, Config.COMMON);
+        mod.registerConfig(ModConfig.Type.CLIENT, Config.CLIENT);
         bus.addListener(Config::onConfigLoad);
         bus.addListener(Config::onConfigReload);
 
