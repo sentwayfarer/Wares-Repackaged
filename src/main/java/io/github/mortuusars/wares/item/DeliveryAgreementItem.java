@@ -189,7 +189,7 @@ public class DeliveryAgreementItem extends Item {
     }
 
     public Either<DeliveryAgreement, AgreementError> getAgreementFromStack(ItemStack stack) {
-        if (stack.getTag() == null || stack.getTag().isEmpty())
+        if (stack.getComponents().isEmpty())
             return Either.right(AgreementError.NO_TAG);
 
         Optional<DeliveryAgreement> optionalAgreement = DeliveryAgreement.fromItemStack(stack);
