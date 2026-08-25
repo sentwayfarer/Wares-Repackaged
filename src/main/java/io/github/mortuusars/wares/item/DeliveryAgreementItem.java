@@ -39,9 +39,10 @@ public class DeliveryAgreementItem extends Item {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, Level level, List<Component> tooltipComponents, TooltipFlag isAdvanced) {
+    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
         getAgreementFromStack(stack).ifLeft(agreement ->
-                tooltipComponents.add(Component.translatable("item.wares.agreement.view.tooltip").withStyle(Style.EMPTY.withColor(0xd6b589))));
+                tooltipComponents.add(Component.translatable("item.wares.agreement.view.tooltip").withStyle(Style.EMPTY.withColor(0xd6b589)))
+        );
     }
 
     @Override
