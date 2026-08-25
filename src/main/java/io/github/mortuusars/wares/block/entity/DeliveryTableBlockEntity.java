@@ -10,6 +10,7 @@ import io.github.mortuusars.wares.data.agreement.component.RequestedItem;
 import io.github.mortuusars.wares.integration.kubejs.KubeJS;
 import io.github.mortuusars.wares.item.DeliveryAgreementItem;
 import io.github.mortuusars.wares.menu.DeliveryTableMenu;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -50,11 +51,14 @@ import net.neoforged.neoforge.items.wrapper.SidedInvWrapper;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 @SuppressWarnings({"SameParameterValue", "BooleanMethodIsAlwaysInverted", "unused"})
 public class DeliveryTableBlockEntity extends BaseContainerBlockEntity implements WorldlyContainer {
     public static final int SLOTS = 14;
@@ -433,10 +437,10 @@ public class DeliveryTableBlockEntity extends BaseContainerBlockEntity implement
 
     // <Container>
 
-    protected @NotNull ItemStackHandler createInventory(int slots) {
+    protected ItemStackHandler createInventory(int slots) {
         return new ItemStackHandler(slots) {
             @Override
-            public boolean isItemValid(int slot, @NotNull ItemStack stack) {
+            public boolean isItemValid(int slot, ItemStack stack) {
                 if (slot == AGREEMENT_SLOT)
                     return stack.getItem() instanceof DeliveryAgreementItem;
                 else if (slot == BOX_SLOT)
@@ -444,9 +448,9 @@ public class DeliveryTableBlockEntity extends BaseContainerBlockEntity implement
                 return super.isItemValid(slot, stack);
             }
 
-            @NotNull
+           
             @Override
-            public ItemStack insertItem(int slot, @NotNull ItemStack stack, boolean simulate) {
+            public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
                 if (slot == BOX_SLOT && !Config.DELIVERIES_REQUIRE_BOXES.get())
                     return stack;
                 return super.insertItem(slot, stack, simulate);
@@ -483,7 +487,7 @@ public class DeliveryTableBlockEntity extends BaseContainerBlockEntity implement
     }
 
     @Override
-    public @NotNull ItemStack getItem(int slot) {
+    public ItemStack getItem(int slot) {
         return inventory.getStackInSlot(slot);
     }
 
@@ -491,33 +495,33 @@ public class DeliveryTableBlockEntity extends BaseContainerBlockEntity implement
         return getItem(AGREEMENT_SLOT);
     }
 
-    public @NotNull ItemStack extractAgreementItem() {
+    public ItemStack extractAgreementItem() {
         return removeItem(AGREEMENT_SLOT, 1);
     }
 
-    public void setAgreementItem(@NotNull ItemStack stack) {
+    public void setAgreementItem(ItemStack stack) {
         setItem(AGREEMENT_SLOT, stack);
     }
 
     @Override
-    public @NotNull ItemStack removeItem(int slot, int amount) {
+    public ItemStack removeItem(int slot, int amount) {
         return inventory.extractItem(slot, amount, false);
     }
 
     @Override
-    public @NotNull ItemStack removeItemNoUpdate(int slot) {
+    public ItemStack removeItemNoUpdate(int slot) {
         ItemStack stack = inventory.getStackInSlot(slot);
         inventory.setStackInSlot(slot, ItemStack.EMPTY);
         return stack;
     }
 
     @Override
-    public void setItem(int slot, @NotNull ItemStack stack) {
+    public void setItem(int slot, ItemStack stack) {
         inventory.setStackInSlot(slot, stack);
     }
 
     @Override
-    public int @NotNull [] getSlotsForFace(Direction side) {
+    public int [] getSlotsForFace(Direction side) {
         return switch (side) {
             case DOWN -> OUTPUT_SLOTS;
             case UP -> Config.DELIVERIES_REQUIRE_BOXES.get() ? AGREEMENT_PLUS_PACKAGES_SLOTS : AGREEMENT_SLOTS;
@@ -527,12 +531,12 @@ public class DeliveryTableBlockEntity extends BaseContainerBlockEntity implement
     }
 
     @Override
-    public boolean canPlaceItemThroughFace(int index, @NotNull ItemStack itemStack, @Nullable Direction direction) {
+    public boolean canPlaceItemThroughFace(int index, ItemStack itemStack, @Nullable Direction direction) {
         return canPlaceItem(index, itemStack);
     }
 
     @Override
-    public boolean canTakeItemThroughFace(int index, @NotNull ItemStack pStack, @NotNull Direction direction) {
+    public boolean canTakeItemThroughFace(int index, ItemStack pStack, Direction direction) {
         return index >= OUTPUT_SLOTS[0];
     }
 
@@ -543,24 +547,24 @@ public class DeliveryTableBlockEntity extends BaseContainerBlockEntity implement
         }
     }
 
-    public boolean canPlaceItem(int slotIndex, @NotNull ItemStack stack) {
+    public boolean canPlaceItem(int slotIndex, ItemStack stack) {
         return (slotIndex == AGREEMENT_SLOT && stack.getItem() instanceof DeliveryAgreementItem)
                 || (slotIndex == BOX_SLOT && stack.is(Wares.Tags.Items.DELIVERY_BOXES))
                 || (slotIndex >= INPUT_SLOTS[0] && slotIndex < OUTPUT_SLOTS[0]);
     }
 
     @Override
-    public boolean stillValid(@NotNull Player player) {
+    public boolean stillValid(Player player) {
         return Container.stillValidBlockEntity(this, player);
     }
 
     @Override
-    protected @NotNull Component getDefaultName() {
+    protected Component getDefaultName() {
         return Component.translatable("block.wares.delivery_table");
     }
 
     @Override
-    protected @NotNull AbstractContainerMenu createMenu(int containerId, @NotNull Inventory inventory) {
+    protected AbstractContainerMenu createMenu(int containerId, Inventory inventory) {
         return new DeliveryTableMenu(containerId, inventory, this, containerData);
     }
 
@@ -637,7 +641,7 @@ public class DeliveryTableBlockEntity extends BaseContainerBlockEntity implement
     }
 
     @Override
-    public @NotNull Packet<ClientGamePacketListener> getUpdatePacket() {
+    public Packet<ClientGamePacketListener> getUpdatePacket() {
         return ClientboundBlockEntityDataPacket.create(this);
     }
 
