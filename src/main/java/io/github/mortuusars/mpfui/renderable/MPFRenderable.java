@@ -56,7 +56,7 @@ public abstract class MPFRenderable<T extends MPFRenderable<T>> extends Abstract
     }
 
     @Override
-    public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
+    public void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
         if (isVisible(mouseX, mouseY)) {
             super.render(graphics, mouseX, mouseY, partialTick);
         }

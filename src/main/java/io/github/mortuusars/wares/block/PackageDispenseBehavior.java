@@ -24,12 +24,12 @@ public class PackageDispenseBehavior extends OptionalDispenseItemBehavior {
         this.setSuccess(false);
         Item item = stack.getItem();
         if (item instanceof BlockItem) {
-            Direction direction = source.getBlockState().getValue(DispenserBlock.FACING);
-            BlockPos blockpos = source.getPos().relative(direction);
-            Direction direction1 = source.getLevel().isEmptyBlock(blockpos.below()) ? direction : Direction.UP;
+            Direction direction = source.state().getValue(DispenserBlock.FACING);
+            BlockPos blockpos = source.pos().relative(direction);
+            Direction direction1 = source.level().isEmptyBlock(blockpos.below()) ? direction : Direction.UP;
 
             try {
-                this.setSuccess(((BlockItem)item).place(new DirectionalPlaceContext(source.getLevel(), blockpos, direction, stack, direction1)).consumesAction());
+                this.setSuccess(((BlockItem)item).place(new DirectionalPlaceContext(source.level(), blockpos, direction, stack, direction1)).consumesAction());
             } catch (Exception exception) {
                 LOGGER.error("Error trying to place package at {}", blockpos, exception);
             }
