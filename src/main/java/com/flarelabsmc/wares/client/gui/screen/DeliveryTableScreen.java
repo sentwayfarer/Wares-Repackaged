@@ -1,0 +1,131 @@
+package com.flarelabsmc.wares.client.gui.screen;
+
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.flarelabsmc.wares.Wares;
+import com.flarelabsmc.wares.block.entity.DeliveryTableBlockEntity;
+import com.flarelabsmc.wares.config.Config;
+import com.flarelabsmc.wares.menu.DeliveryTableMenu;
+import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.components.ImageButton;
+import net.minecraft.client.gui.components.Tooltip;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.Slot;
+
+public class DeliveryTableScreen extends AbstractContainerScreen<DeliveryTableMenu> {
+    public static final ResourceLocation TEXTURE = Wares.resource("textures/gui/delivery_table.png");
+
+    private final Component manualDeliveryButtonTitle;
+    private final MutableComponent manualDeliveryButtonTooltip;
+    private ImageButton manualDeliveryButton;
+
+    public DeliveryTableScreen(DeliveryTableMenu menu, Inventory playerInventory, Component title) {
+        super(menu, playerInventory, title);
+        this.manualDeliveryButtonTitle = Component.translatable("gui.wares.delivery_table.manual_delivery");
+        manualDeliveryButtonTooltip = Component.translatable("gui.wares.delivery_table.manual_delivery.tooltip");
+
+        double manualDeliveryTimeModifier = Config.MANUAL_DELIVERY_TIME_MODIFIER.get();
+        if (manualDeliveryTimeModifier > 1.0D) {
+            String formattedModifier = manualDeliveryTimeModifier % 1 == 0 ?
+                    String.format("%.0f", manualDeliveryTimeModifier) :
+                    String.format("%.1f", manualDeliveryTimeModifier);
+            manualDeliveryButtonTooltip.append("\n").append(Component.translatable("gui.wares.delivery_table.manual_delivery.tooltip_extra_info", formattedModifier).withStyle(ChatFormatting.GRAY));
+        }
+
+        playerInventory.player.playSound(Wares.SoundEvents.DELIVERY_TABLE_OPEN.get(), 0.8f,
+                playerInventory.player.level().getRandom().nextFloat() * 0.2f + 0.9f);
+    }
+
+    @Override
+    protected void init() {
+        super.init();
+        imageWidth = 176;
+        imageHeight = 172;
+        inventoryLabelY = 79;
+
+        this.manualDeliveryButton = new ImageButton(getGuiLeft() + 74, getGuiTop() + 36, 28, 20,
+                176, 70, 20, TEXTURE, 256, 256,
+                this::manualDeliveryButtonPressed,
+                this.manualDeliveryButtonTitle);
+
+        this.manualDeliveryButton.setTooltip(Tooltip.create(manualDeliveryButtonTooltip));
+
+        addRenderableWidget(manualDeliveryButton);
+    }
+
+    private void manualDeliveryButtonPressed(Button button) {
+        assert this.minecraft != null;
+        assert this.minecraft.gameMode != null;
+        this.minecraft.gameMode.handleInventoryButtonClick(menu.containerId, DeliveryTableMenu.MANUAL_DELIVERY_BUTTON_ID);
+    }
+
+    @Override
+    public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
+        manualDeliveryButton.visible = menu.canDeliverManually();
+
+        this.renderBackground(graphics);
+        super.render(graphics, mouseX, mouseY, partialTick);
+        this.renderTooltip(graphics, mouseX, mouseY);
+
+        if (menu.getCarried().isEmpty()) {
+            Slot agreementSlot = menu.slots.get(DeliveryTableBlockEntity.AGREEMENT_SLOT);
+            if (!agreementSlot.hasItem() && isHovering(agreementSlot.x, agreementSlot.y, 18, 18, mouseX, mouseY))
+                graphics.renderTooltip(font, Component.translatable("gui.wares.delivery_table.no_agreement.tooltip"), mouseX, mouseY);
+
+            if (Config.DELIVERIES_REQUIRE_BOXES.get()) {
+                Slot boxSlot = menu.slots.get(DeliveryTableBlockEntity.PACKAGES_SLOT);
+                if (!boxSlot.hasItem() && isHovering(boxSlot.x, boxSlot.y, 18, 18, mouseX, mouseY))
+                    graphics.renderTooltip(font, Component.translatable("gui.wares.delivery_table.no_packages.tooltip"), mouseX, mouseY);
+            }
+        }
+    }
+
+    @Override
+    protected void renderBg(GuiGraphics graphics, float partialTick, int mouseX, int mouseY) {
+        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+        graphics.blit(TEXTURE, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
+
+        // Agreement Slot
+        if (!menu.blockEntity.isAgreementLocked())
+            graphics.blit(TEXTURE, leftPos + 79, topPos + 15, 176, 16, 18, 18);
+
+        // Agreement placeholder
+        if (!menu.slots.get(DeliveryTableBlockEntity.AGREEMENT_SLOT).hasItem())
+            graphics.blit(TEXTURE, leftPos + 79, topPos + 15, 176, 34, 18, 18);
+
+        // PACKAGES SLOT
+        if (Config.DELIVERIES_REQUIRE_BOXES.get()) {
+            Slot packagesSlot = menu.slots.get(DeliveryTableBlockEntity.PACKAGES_SLOT);
+            graphics.blit(TEXTURE, leftPos + packagesSlot.x - 1, topPos + packagesSlot.y - 1, 176, 16, 18, 18);
+
+            // Package placeholder
+            if (!packagesSlot.hasItem())
+                graphics.blit(TEXTURE, leftPos + packagesSlot.x - 1, topPos + packagesSlot.y - 1, 176, 52, 18, 18);
+        }
+
+        // ARROW
+        float progress = menu.getDeliveryProgress();
+        int arrowWidth = 22;
+        int arrowHeight = 16;
+        int progressInPixels = Mth.clamp((int)((arrowWidth + 1) * progress), 0, arrowWidth);
+        graphics.blit(TEXTURE, leftPos + 77, topPos + 37, 176, 0, progressInPixels, arrowHeight);
+    }
+
+    @Override
+    public void onClose() {
+        super.onClose();
+        if (Minecraft.getInstance().player != null) {
+            Minecraft.getInstance().player.playSound(Wares.SoundEvents.DELIVERY_TABLE_CLOSE.get(), 0.8f,
+                Minecraft.getInstance().player.level().getRandom().nextFloat() * 0.2f + 0.9f);
+        }
+    }
+}
+
+

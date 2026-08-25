@@ -5,8 +5,8 @@
   "compatibilityLevel": "JAVA_16",
   "refmap": "mixins.wares.refmap.json",
   "mixins": [
-    "ShowTradesToPlayerMixin",
-    "VillagerGoalPackagesMixin"
+    "com.flarelabsmc.wares.mixin.ShowTradesToPlayerMixin",
+    "com.flarelabsmc.wares.mixin.VillagerGoalPackagesMixin"
   ],
   "injectors": {
     "defaultRequire": -1

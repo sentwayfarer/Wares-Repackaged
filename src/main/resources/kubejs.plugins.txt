@@ -1,1 +1,1 @@
-io.github.mortuusars.wares.integration.kubejs.WaresKubeJSPlugin
+kubejs.integration.wares.com.flarelabsmc.WaresKubeJSPlugin

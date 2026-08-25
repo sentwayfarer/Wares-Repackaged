@@ -1,0 +1,327 @@
+package com.flarelabsmc.wares.block;
+
+import com.mojang.serialization.MapCodec;
+import com.flarelabsmc.wares.Wares;
+import com.flarelabsmc.wares.block.entity.DeliveryTableBlockEntity;
+import com.flarelabsmc.wares.client.gui.agreement.AgreementGUI;
+import com.flarelabsmc.wares.data.agreement.DeliveryAgreement;
+import com.flarelabsmc.wares.data.agreement.AgreementType;
+import com.flarelabsmc.wares.item.DeliveryAgreementItem;
+import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.NonNullList;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Mth;
+import net.minecraft.world.*;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
+import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.ParametersAreNonnullByDefault;
+
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
+public class DeliveryTableBlock extends BaseEntityBlock {
+    public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
+    public static final EnumProperty<AgreementType> AGREEMENT = EnumProperty.create("agreement", AgreementType.class);
+
+    private static final VoxelShape TABLE_SHAPE = Shapes.or(
+            Block.box(0, 12, 0, 16, 16, 16), // Tabletop
+            Block.box(1, 2, 1, 15, 12, 15),  // Main
+            Block.box(1, 0, 1, 4, 2, 4), // Leg Front Right
+            Block.box(12, 0, 1, 15, 2, 4), // Leg Front Left
+            Block.box(1, 0, 12, 4, 2, 15), // Leg Back Right
+            Block.box(12, 0, 12, 15, 2, 15)); // Leg Back Left
+    private static final VoxelShape TABLE_WITH_AGREEMENT_SHAPE = Shapes.or(TABLE_SHAPE, Block.box(2, 16, 2, 14, 17, 14));
+
+    public DeliveryTableBlock(Properties properties) {
+        super(properties);
+        this.registerDefaultState(getStateDefinition().any()
+                .setValue(FACING, Direction.NORTH)
+                .setValue(AGREEMENT, AgreementType.NONE));
+    }
+
+    @Override
+    public @Nullable MenuProvider getMenuProvider(BlockState state, Level level, BlockPos pos) {
+        if (!(level.getBlockEntity(pos) instanceof DeliveryTableBlockEntity blockEntity))
+            return null;
+
+        return blockEntity;
+    }
+
+    @Override
+    protected MapCodec<? extends BaseEntityBlock> codec() {
+        return simpleCodec(DeliveryTableBlock::new);
+    }
+
+    @Override
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+        builder.add(FACING, AGREEMENT);
+    }
+
+    @Override
+    public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+        return state.getValue(AGREEMENT) == AgreementType.NONE ? TABLE_SHAPE : TABLE_WITH_AGREEMENT_SHAPE;
+    }
+
+    @Override
+    public RenderShape getRenderShape(BlockState state) {
+        return RenderShape.MODEL;
+    }
+
+    @Nullable
+    @Override
+    public BlockState getStateForPlacement(BlockPlaceContext context) {
+        return getStateDefinition().any().setValue(FACING, context.getHorizontalDirection().getOpposite());
+    }
+
+    @Nullable
+    @Override
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState blockState) {
+        return new DeliveryTableBlockEntity(pos, blockState);
+    }
+
+    @Nullable
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> blockEntityType) {
+        return !level.isClientSide ?
+                createTickerHelper(blockEntityType, Wares.BlockEntities.DELIVERY_TABLE.get(),
+                        (lv, pos, st, blockEntity) -> blockEntity.serverTick())
+                : null;
+    }
+
+    private void startUse(DeliveryTableBlockEntity blockEntity, Player player)
+    {
+        if (player instanceof ServerPlayer serverPlayer) {
+            blockEntity.trySetOwner(serverPlayer);
+            player.awardStat(Wares.Stats.INTERACT_WITH_DELIVERY_TABLE);
+        }
+    }
+
+    private boolean tryPlaceDeliveryItem(
+            ItemStack stack,
+            BlockHitResult hitResult,
+            DeliveryTableBlockEntity blockEntity,
+            Level level,
+            Player player,
+            BlockPos pos
+    ) {
+        if (stack.getItem() instanceof DeliveryAgreementItem
+                && hitResult.getDirection() == Direction.UP
+                && blockEntity.getAgreementItem().isEmpty()) {
+            blockEntity.setAgreementItem(stack.split(1));
+            level.playSound(
+                    player,
+                    pos.getX() + 0.5f,
+                    pos.getY() + 1f,
+                    pos.getZ() + 0.5f,
+                    Wares.SoundEvents.PAPER_CRACKLE.get(),
+                    SoundSource.PLAYERS,
+                    1f,
+                    level.getRandom().nextFloat() * 0.1f + 0.8f
+            );
+            return true;
+        }
+
+        return false;
+    }
+
+    private boolean tryGetDeliveryItem(
+            DeliveryTableBlockEntity blockEntity,
+            Player player,
+            Level level,
+            BlockPos pos,
+            BlockHitResult hitResult
+    ) {
+        ItemStack agreementStack = blockEntity.getAgreementItem();
+        if (!agreementStack.isEmpty() && hitResult.getLocation().y > pos.getY() + 1) {
+            if (player.isSecondaryUseActive()) {
+                if (!level.isClientSide) {
+                    if (blockEntity.isAgreementLocked()) {
+                        player.displayClientMessage(
+                                Component.translatable("block.wares.delivery_table.agreement_locked"),
+                                true
+                        );
+                        return true;
+                    }
+
+                    agreementStack = blockEntity.extractAgreementItem();
+
+                    ItemEntity item = new ItemEntity(
+                            level,
+                            pos.getX() + 0.5,
+                            pos.getY() + 1.1,
+                            pos.getZ() + 0.5,
+                            agreementStack
+                    );
+                    Vec3 delta = Vec3.atCenterOf(pos)
+                            .lerp(player.position(), 0.05D)
+                            .subtract(Vec3.atCenterOf(pos));
+                    item.setDeltaMovement(delta.x, delta.y + 0.25, delta.z);
+                    level.addFreshEntity(item);
+                    level.playSound(
+                            null,
+                            pos.getX() + 0.5f,
+                            pos.getY() + 1f,
+                            pos.getZ() + 0.5f,
+                            Wares.SoundEvents.PAPER_CRACKLE.get(),
+                            SoundSource.PLAYERS,
+                            1f,
+                            level.getRandom().nextFloat() * 0.1f + 1.1f
+                    );
+                }
+
+                return true;
+            }
+            else if (blockEntity.getAgreement() != DeliveryAgreement.EMPTY){
+                if (level.isClientSide)
+                    AgreementGUI.showAsOverlay(player, blockEntity::getAgreement);
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private void openMenuOnUse(DeliveryTableBlockEntity blockEntity, Player player, BlockPos pos)
+    {
+        if (player instanceof ServerPlayer serverPlayer) {
+            blockEntity.trySetOwner(serverPlayer);
+            serverPlayer.openMenu(blockEntity, pos);
+        }
+    }
+
+    @Override
+    public ItemInteractionResult useItemOn(
+            ItemStack stack,
+            BlockState state,
+            Level level,
+            BlockPos pos,
+            Player player,
+            InteractionHand hand,
+            BlockHitResult hitResult
+    ) {
+        if (!(level.getBlockEntity(pos) instanceof DeliveryTableBlockEntity blockEntity))
+            return ItemInteractionResult.FAIL;
+
+        startUse(blockEntity, player);
+
+        if (tryPlaceDeliveryItem(stack, hitResult, blockEntity, level, player, pos))
+            return ItemInteractionResult.SUCCESS;
+
+        if (tryGetDeliveryItem(blockEntity, player, level, pos, hitResult))
+            return ItemInteractionResult.SUCCESS;
+
+        openMenuOnUse(blockEntity, player, pos);
+
+        return ItemInteractionResult.sidedSuccess(level.isClientSide);
+    }
+
+    @Override
+    protected InteractionResult useWithoutItem(
+            BlockState state,
+            Level level,
+            BlockPos pos,
+            Player player,
+            BlockHitResult hitResult
+    ) {
+        if (!(level.getBlockEntity(pos) instanceof DeliveryTableBlockEntity blockEntity))
+            return InteractionResult.FAIL;
+
+        startUse(blockEntity, player);
+
+        if (tryGetDeliveryItem(blockEntity, player, level, pos, hitResult)) return InteractionResult.SUCCESS;
+
+        openMenuOnUse(blockEntity, player, pos);
+
+        return InteractionResult.sidedSuccess(level.isClientSide);
+    }
+
+    @Override
+    public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving) {
+        if (!state.is(newState.getBlock())) {
+            if (level.getBlockEntity(pos) instanceof DeliveryTableBlockEntity blockEntity) {
+                NonNullList<ItemStack> items = NonNullList.withSize(blockEntity.getContainerSize(), ItemStack.EMPTY);
+
+                for (int slot = 0; slot < blockEntity.getContainerSize(); slot++) {
+                    if (slot == DeliveryTableBlockEntity.AGREEMENT_SLOT && blockEntity.shouldVoidAgreementOnBreak())
+                        continue;
+
+                    items.set(slot, blockEntity.getItem(slot));
+                }
+
+                Containers.dropContents(level, pos, items);
+
+                level.updateNeighbourForOutputSignal(pos, this);
+            }
+
+            super.onRemove(state, level, pos, newState, isMoving);
+        }
+    }
+
+    @Override
+    public boolean hasAnalogOutputSignal(BlockState pState) {
+        return true;
+    }
+
+    @Override
+    public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
+        if (!(level.getBlockEntity(pos) instanceof DeliveryTableBlockEntity deliveryTableBlockEntity))
+            return;
+
+        deliveryTableBlockEntity.onPlacedBy(placer);
+    }
+
+    @Override
+    public int getAnalogOutputSignal(BlockState blockState, Level level, BlockPos pos) {
+        if (!(level.getBlockEntity(pos) instanceof DeliveryTableBlockEntity deliveryTableEntity))
+            return 0;
+
+        DeliveryAgreement agreement = deliveryTableEntity.getAgreement();
+
+        if (agreement == DeliveryAgreement.EMPTY || agreement.isExpired(level.getGameTime()))
+            return 0;
+
+        if (agreement.isCompleted())
+            return 15;
+
+        if (!agreement.isInfinite()) {
+            float completion = Mth.clamp(agreement.getDelivered() / (float)agreement.getOrdered(), 0f, 1f);
+            return (int)Mth.map(completion, 0f, 1f, 1f, 15f);
+        }
+        else
+            return 1;
+    }
+
+    @Override
+    public BlockState rotate(BlockState state, Rotation rotation) {
+        return state.setValue(FACING, rotation.rotate(state.getValue(FACING)));
+    }
+
+    @Override
+    public BlockState mirror(BlockState state, Mirror mirror) {
+        return rotate(state, mirror.getRotation(state.getValue(FACING)));
+    }
+}

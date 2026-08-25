@@ -1,0 +1,52 @@
+package com.flarelabsmc.wares.integration.kubejs;
+
+import com.google.common.base.Supplier;
+import com.google.common.base.Suppliers;
+import com.flarelabsmc.wares.block.entity.DeliveryTableBlockEntity;
+import com.flarelabsmc.wares.integration.kubejs.event.DeliveryKubeEvent;
+import net.minecraft.server.level.ServerPlayer;
+import net.neoforged.fml.ModList;
+import org.jetbrains.annotations.Nullable;
+
+public class KubeJSIntegration {
+    private static final Supplier<Boolean> isLoaded = Suppliers.memoize(() -> ModList.get().isLoaded("kubejs"));
+
+    public static boolean isLoaded() {
+        return isLoaded.get();
+    }
+
+    public static void batchDelivered(DeliveryTableBlockEntity blockEntity, @Nullable ServerPlayer player) {
+        if (isLoaded()) {
+            Events.batchDelivered(blockEntity, player);
+        }
+    }
+
+    public static void agreementCompleted(DeliveryTableBlockEntity blockEntity, @Nullable ServerPlayer player) {
+        if (isLoaded()) {
+            Events.agreementCompleted(blockEntity, player);
+        }
+    }
+
+    public static void agreementExpired(DeliveryTableBlockEntity blockEntity, @Nullable ServerPlayer player) {
+        if (isLoaded()) {
+            Events.agreementExpired(blockEntity, player);
+        }
+    }
+
+    /**
+     * Indirect calls is to avoid crashing the game due to loading of non-existing classes (if KubeJS is not present).
+     */
+    private static class Events {
+        public static void batchDelivered(DeliveryTableBlockEntity blockEntity, @Nullable ServerPlayer player) {
+            WaresKubeEvents.BATCH_DELIVERED.post(new DeliveryKubeEvent(blockEntity, player));
+        }
+
+        public static void agreementCompleted(DeliveryTableBlockEntity blockEntity, @Nullable ServerPlayer player) {
+            WaresKubeEvents.AGREEMENT_COMPLETED.post(new DeliveryKubeEvent(blockEntity, player));
+        }
+
+        public static void agreementExpired(DeliveryTableBlockEntity blockEntity, @Nullable ServerPlayer player) {
+            WaresKubeEvents.AGREEMENT_EXPIRED.post(new DeliveryKubeEvent(blockEntity, player));
+        }
+    }
+}
