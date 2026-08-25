@@ -468,18 +468,6 @@ public class DeliveryTableBlockEntity extends BaseContainerBlockEntity implement
         return inventory;
     }
 
-    @NotNull
-    @Override
-    public <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
-        if (!this.remove && cap == ForgeCapabilities.ITEM_HANDLER) {
-            if (side == Direction.DOWN) return inventoryHandlers[0].cast();
-            if (side == Direction.UP) return inventoryHandlers[1].cast();
-            if (side != null) return inventoryHandlers[2].cast();
-        }
-
-        return super.getCapability(cap, side);
-    }
-
     public int getContainerSize() {
         return inventory.getSlots();
     }
@@ -648,39 +636,8 @@ public class DeliveryTableBlockEntity extends BaseContainerBlockEntity implement
     }
 
     @Override
-    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt) {
-        super.onDataPacket(net, pkt);
-        handleUpdateTag(pkt.getTag());
-    }
-
-    @Override
     public @NotNull Packet<ClientGamePacketListener> getUpdatePacket() {
         return ClientboundBlockEntityDataPacket.create(this);
-    }
-
-    @Override
-    public @NotNull CompoundTag getUpdateTag() {
-        return serializeNBT();
-    }
-
-    @Override
-    public void handleUpdateTag(CompoundTag tag) {
-        super.handleUpdateTag(tag);
-        load(tag);
-    }
-
-    @Override
-    public void invalidateCaps() {
-        super.invalidateCaps();
-        for (LazyOptional<IItemHandlerModifiable> inventoryHandler : inventoryHandlers) {
-            inventoryHandler.invalidate();
-        }
-    }
-
-    @Override
-    public void reviveCaps() {
-        super.reviveCaps();
-        inventoryHandlers = net.minecraftforge.items.wrapper.SidedInvWrapper.create(this, Direction.DOWN, Direction.UP, Direction.NORTH);
     }
 
     @SuppressWarnings("UnusedReturnValue")
