@@ -223,9 +223,9 @@ public class Wares
     }
 
     public static class AdvancementTriggers {
-        public static DeliveryTableTrigger BATCH_DELIVERED = new DeliveryTableTrigger(Wares.resource("batch_delivered"));
-        public static DeliveryTableTrigger AGREEMENT_COMPLETED = new DeliveryTableTrigger(Wares.resource("agreement_completed"));
-        public static DeliveryTableTrigger AGREEMENT_EXPIRED = new DeliveryTableTrigger(Wares.resource("agreement_expired"));
+        public static DeliveryTableTrigger BATCH_DELIVERED = new DeliveryTableTrigger();
+        public static DeliveryTableTrigger AGREEMENT_COMPLETED = new DeliveryTableTrigger();
+        public static DeliveryTableTrigger AGREEMENT_EXPIRED = new DeliveryTableTrigger();
 
         public static void register() {
             CriteriaTriggers.register("batch_delivered", BATCH_DELIVERED);

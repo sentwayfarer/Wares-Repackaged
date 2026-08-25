@@ -6,8 +6,8 @@ import net.minecraft.data.DataGenerator;
 import net.minecraft.data.tags.ItemTagsProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
-import net.minecraftforge.common.data.BlockTagsProvider;
-import net.minecraftforge.common.data.ExistingFileHelper;
+import net.neoforged.neoforge.common.data.BlockTagsProvider;
+import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -38,13 +38,13 @@ public class ItemTags extends ItemTagsProvider {
 
     private void optionalTags(TagAppender<Item> tag, String namespace, String... items) {
         for (String item : items) {
-            tag.addOptionalTag(new ResourceLocation(namespace, item));
+            tag.addOptionalTag(ResourceLocation.fromNamespaceAndPath(namespace, item));
         }
     }
 
     private void optional(TagAppender<Item> tag, String namespace, String... items) {
         for (String item : items) {
-            tag.addOptional(new ResourceLocation(namespace, item));
+            tag.addOptional(ResourceLocation.fromNamespaceAndPath(namespace, item));
         }
     }
 }

@@ -1,14 +1,13 @@
 package io.github.mortuusars.wares.data.generation.provider;
 
-
 import io.github.mortuusars.wares.Wares;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
-import net.minecraftforge.client.model.generators.ItemModelBuilder;
-import net.minecraftforge.client.model.generators.ItemModelProvider;
-import net.minecraftforge.common.data.ExistingFileHelper;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.neoforge.client.model.generators.ItemModelBuilder;
+import net.neoforged.neoforge.client.model.generators.ItemModelProvider;
+import net.neoforged.neoforge.common.data.ExistingFileHelper;
 
 @SuppressWarnings({"DataFlowIssue", "UnusedReturnValue"})
 public class ItemModels extends ItemModelProvider {
@@ -28,12 +27,12 @@ public class ItemModels extends ItemModelProvider {
     }
 
     private ItemModelBuilder blockItem(BlockItem item) {
-        return withExistingParent(ForgeRegistries.ITEMS.getKey(item).getPath(), modLoc("block/" + ForgeRegistries.ITEMS.getKey(item).getPath()));
+        return withExistingParent(BuiltInRegistries.ITEM.getKey(item).getPath(), modLoc("block/" + BuiltInRegistries.ITEM.getKey(item).getPath()));
     }
 
     private ItemModelBuilder singleTextureItem(Item item) {
-        return singleTexture(ForgeRegistries.ITEMS.getKey(item).getPath(),
+        return singleTexture(BuiltInRegistries.ITEM.getKey(item).getPath(),
                 mcLoc("item/generated"), "layer0",
-                modLoc("item/" + ForgeRegistries.ITEMS.getKey(item).getPath()));
+                modLoc("item/" + BuiltInRegistries.ITEM.getKey(item).getPath()));
     }
 }
